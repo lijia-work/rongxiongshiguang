@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>绒熊时光 - 小程序原型图（完整二级页）</title>
+    <link rel="stylesheet" href="css/style.css">
     <style>
         * {
             margin: 0;
@@ -703,7 +704,12 @@
     <div id="homePage" class="page-content page active-page">
         <div class="top-bar">
             <div class="app-title">绒熊时光</div>
-            <div class="search-icon" id="searchBtn">🔍</div>
+            <div class="search-container" id="searchContainer">
+                <div class="search-icon" id="searchBtn">🔍</div>
+                <div class="search-expandable" id="searchExpandable" style="display:none;">
+                    <input type="text" id="searchInput" class="search-input" placeholder="搜索">
+                </div>
+            </div>
         </div>
         <div class="reminder-bar" id="reminderBar">
             <div class="reminder-left">
@@ -725,14 +731,18 @@
         <div class="top-bar" style="border-bottom: none; padding-bottom: 0;">
             <div class="app-title" style="font-size: 20px;">我的</div><div></div>
         </div>
-        <div class="user-info">
-            <div class="user-avatar">🐻‍❄️</div><div><div class="user-name">小熊饲养员</div><div style="font-size:12px; color:#B3A28E;">微信用户</div></div>
+        <div class="user-info" id="userInfoCard">
+            <div class="user-avatar" id="userAvatar">🐻‍❄️</div>
+            <div class="user-info-edit">
+                <div class="user-name" id="userName">小熊饲养员</div>
+            </div>
+            <div class="edit-profile-btn" id="editProfileBtn">编辑</div>
         </div>
-        <div class="settings-item" onclick="alert('消息提醒开关')"><span>🔔 消息提醒</span><span>开 ›</span></div>
-        <div class="settings-item" onclick="alert('隐私设置')"><span>🔒 隐私设置</span><span>›</span></div>
-        <div class="settings-item" onclick="alert('关于我们')"><span>📖 关于我们</span><span>›</span></div>
-        <div class="settings-item" onclick="alert('意见反馈')"><span>💬 意见反馈</span><span>›</span></div>
-        <div class="settings-item" onclick="alert('邀熊同玩功能开发中')"><span>📤 邀熊同玩</span><span>›</span></div>
+        <div class="settings-item" id="notificationSettingsItem"><span>🔔 消息提醒</span><span id="notificationStatus">开 ›</span></div>
+        <div class="settings-item" id="privacySettingsItem"><span>🔒 隐私设置</span><span>›</span></div>
+        <div class="settings-item" id="aboutItem"><span>📖 关于我们</span><span>›</span></div>
+        <div class="settings-item" id="feedbackItem"><span>💬 意见反馈</span><span>›</span></div>
+        <div class="settings-item" id="inviteItem"><span>📤 邀熊同玩</span><span>›</span></div>
     </div>
 
     <!-- 待办提醒详情页 -->
@@ -865,6 +875,257 @@
         </div>
     </div>
 
+    <!-- 消息通知设置页 -->
+    <div id="notificationPage" class="page" style="display: none; background: #FFFCF8; min-height: 700px;">
+        <div class="detail-header">
+            <div class="back-home-btn" id="backFromNotification">←</div>
+            <div class="detail-title">🔔 消息通知</div>
+            <div style="width:36px;"></div>
+        </div>
+        <div class="page-content" style="padding-bottom: 100px;">
+            <div class="settings-item">
+                <span>消息通知开关</span>
+                <div class="toggle-switch active" id="notificationToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            <div class="settings-section-title">提醒方式</div>
+            <div class="settings-item">
+                <span>🔊 声音提醒</span>
+                <div class="toggle-switch active" id="soundToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            <div class="settings-item">
+                <span>📳 震动提醒</span>
+                <div class="toggle-switch active" id="vibrationToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            <div class="settings-section-title">免打扰时段</div>
+            <div class="settings-item">
+                <span>🌙 开启免打扰</span>
+                <div class="toggle-switch" id="dndToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            <div class="dnd-time-selector" id="dndTimeSelector" style="display:none;">
+                <div class="time-range-picker">
+                    <div class="time-input-group">
+                        <label>开始时间</label>
+                        <input type="time" id="dndStartTime" value="22:00" class="time-input">
+                    </div>
+                    <span class="time-separator">至</span>
+                    <div class="time-input-group">
+                        <label>结束时间</label>
+                        <input type="time" id="dndEndTime" value="08:00" class="time-input">
+                    </div>
+                </div>
+            </div>
+            <div class="settings-section-title">系统消息</div>
+            <div id="systemMessagesList"></div>
+        </div>
+    </div>
+
+    <!-- 隐私设置页 -->
+    <div id="privacyPage" class="page" style="display: none; background: #FFFCF8; min-height: 700px;">
+        <div class="detail-header">
+            <div class="back-home-btn" id="backFromPrivacy">←</div>
+            <div class="detail-title">🔒 隐私设置</div>
+            <div style="width:36px;"></div>
+        </div>
+        <div class="page-content" style="padding-bottom: 100px;">
+            <div class="settings-section-title">账户与数据</div>
+            <div class="settings-item" id="exportDataBtn">
+                <span>📤 导出我的数据</span><span>›</span>
+            </div>
+            <div class="settings-item" id="clearCacheBtn">
+                <span>🗑️ 清除缓存</span><span>›</span>
+            </div>
+            <div class="settings-section-title">权限管理</div>
+            <div class="settings-item">
+                <span>🔐 微信授权</span>
+                <span style="color:#D9A13B;">已授权 ›</span>
+            </div>
+            <div class="settings-item">
+                <span>📷 相机权限</span>
+                <span style="color:#D9A13B;">已开启 ›</span>
+            </div>
+            <div class="settings-item">
+                <span>🖼️ 相册权限</span>
+                <span style="color:#D9A13B;">已开启 ›</span>
+            </div>
+            <div class="settings-section-title">第三方数据收集</div>
+            <div class="privacy-disclaimer">
+                <p>我们仅收集以下数据用于改善您的使用体验：</p>
+                <ul>
+                    <li>宠物档案信息（本地存储）</li>
+                    <li>日记和体重记录（本地存储）</li>
+                    <li>匿名使用统计（可选）</li>
+                </ul>
+                <p style="color:#B3A28E; font-size:12px; margin-top:8px;">我们承诺不会将您的数据分享给任何第三方。</p>
+            </div>
+            <div class="settings-section-title" style="color:#C23D3D;">危险操作</div>
+            <div class="settings-item danger-item" id="deleteAccountBtn">
+                <span style="color:#C23D3D;">⚠️ 注销账户</span><span>›</span>
+            </div>
+            <div class="settings-item danger-item" id="deleteAllDataBtn">
+                <span style="color:#C23D3D;">🗑️ 永久删除所有数据</span><span>›</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 关于我们页 -->
+    <div id="aboutPage" class="page" style="display: none; background: #FFFCF8; min-height: 700px;">
+        <div class="detail-header">
+            <div class="back-home-btn" id="backFromAbout">←</div>
+            <div class="detail-title">📖 关于我们</div>
+            <div style="width:36px;"></div>
+        </div>
+        <div class="page-content" style="padding-bottom: 100px; text-align: center;">
+            <div class="about-logo">
+                <div class="about-logo-icon">🐻</div>
+                <div class="about-app-name">绒熊时光</div>
+                <div class="about-version">版本 2.0.0</div>
+            </div>
+            <div class="about-section">
+                <div class="about-section-title">📝 更新日志</div>
+                <div class="update-log-card">
+                    <div class="update-version">v2.0.0 (2025-04-25)</div>
+                    <ul class="update-list">
+                        <li>✨ 新增日记功能，记录与小熊的每一天</li>
+                        <li>✨ 新增体重记录，追踪小熊健康</li>
+                        <li>✨ 新增用户信息编辑功能</li>
+                        <li>✨ 新增消息通知、隐私设置、意见反馈等功能</li>
+                        <li>🐛 修复若干已知问题</li>
+                    </ul>
+                    <div class="update-version">v1.5.0 (2025-03-15)</div>
+                    <ul class="update-list">
+                        <li>✨ 新增饲养提醒功能</li>
+                        <li>🎨 优化界面设计</li>
+                    </ul>
+                    <div class="update-version">v1.0.0 (2025-01-01)</div>
+                    <ul class="update-list">
+                        <li>🎉 首次发布</li>
+                        <li>✨ 宠物档案管理</li>
+                        <li>✨ 基础饲养记录</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="about-links">
+                <div class="settings-item" id="viewUserAgreement">
+                    <span>📋 用户服务协议</span><span>›</span>
+                </div>
+                <div class="settings-item" id="viewPrivacyPolicy">
+                    <span>🔒 隐私政策</span><span>›</span>
+                </div>
+                <div class="settings-item" id="viewDisclaimer">
+                    <span>⚠️ 免责声明</span><span>›</span>
+                </div>
+            </div>
+            <div class="about-footer">
+                <p>© 2025 绒熊时光团队</p>
+                <p style="font-size:12px; color:#B3A28E; margin-top:4px;">用心记录，陪伴每一刻</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 意见反馈页 -->
+    <div id="feedbackPage" class="page" style="display: none; background: #FFFCF8; min-height: 700px;">
+        <div class="detail-header">
+            <div class="back-home-btn" id="backFromFeedback">←</div>
+            <div class="detail-title">💬 意见反馈</div>
+            <div style="width:36px;"></div>
+        </div>
+        <div class="page-content" style="padding-bottom: 100px;">
+            <div class="form-group">
+                <label class="form-label">反馈类型</label>
+                <div class="category-selector" id="feedbackCategorySelector"></div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">问题描述</label>
+                <textarea id="feedbackDescription" class="form-textarea" style="width:100%; min-height:120px; padding:12px; border-radius:20px; border:1px solid #E8DDD2; font-size:14px; resize:none;" placeholder="请详细描述您遇到的问题或建议..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">截图上传（可选）</label>
+                <div class="image-upload-area">
+                    <div class="upload-btn-sm" id="uploadFeedbackImage">+ 上传截图</div>
+                    <input type="file" id="feedbackImageInput" accept="image/*" multiple style="display:none;">
+                </div>
+                <div id="feedbackImagePreview" class="image-preview-list"></div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">联系方式（可选）</label>
+                <input type="text" id="feedbackContact" class="form-input" placeholder="邮箱或微信，用于回复您的反馈">
+            </div>
+            <div class="save-diary-btn" id="submitFeedbackBtn">提交反馈</div>
+            <div class="settings-section-title" style="margin-top:30px;">我的反馈记录</div>
+            <div id="feedbackHistoryList"></div>
+        </div>
+    </div>
+
+    <!-- 邀熊同玩页 -->
+    <div id="invitePage" class="page" style="display: none; background: #FFFCF8; min-height: 700px;">
+        <div class="detail-header">
+            <div class="back-home-btn" id="backFromInvite">←</div>
+            <div class="detail-title">📤 邀熊同玩</div>
+            <div style="width:36px;"></div>
+        </div>
+        <div class="page-content" style="padding-bottom: 100px; text-align: center;">
+            <div class="invite-card-preview">
+                <div class="invite-card" id="inviteCard">
+                    <div class="invite-card-header">
+                        <span class="invite-logo">🐻</span>
+                        <span class="invite-app-name">绒熊时光</span>
+                    </div>
+                    <div class="invite-card-content">
+                        <div class="invite-title">我的小熊在等我！</div>
+                        <div class="invite-subtitle">来一起记录与毛孩子的美好时光吧~</div>
+                        <div class="invite-inviter">
+                            <span id="inviteInviterName">小熊饲养员</span> 邀请你加入
+                        </div>
+                    </div>
+                    <div class="invite-card-footer">
+                        <div class="invite-qrcode" id="inviteQRCode">
+                            <canvas id="inviteQRCanvas" width="90" height="90"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="share-buttons">
+                <div class="share-btn" id="shareToWechat">
+                    <div class="share-icon">💬</div>
+                    <span>微信好友</span>
+                </div>
+                <div class="share-btn" id="shareToMoments">
+                    <div class="share-icon">🌐</div>
+                    <span>朋友圈</span>
+                </div>
+                <div class="share-btn" id="saveImage">
+                    <div class="share-icon">📥</div>
+                    <span>保存图片</span>
+                </div>
+                <div class="share-btn" id="copyLink">
+                    <div class="share-icon">🔗</div>
+                    <span>复制链接</span>
+                </div>
+            </div>
+            <div class="invite-stats">
+                <div class="stats-title">我的邀请</div>
+                <div class="stats-numbers">
+                    <div class="stat-item">
+                        <div class="stat-number" id="inviteCount">0</div>
+                        <div class="stat-label">已邀请</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="rewardCount">0</div>
+                        <div class="stat-label">奖励</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 底部导航栏 -->
     <div class="bottom-nav" id="bottomNav">
         <div class="nav-item" id="navHome"><div class="nav-icon">🏠</div><span>首页</span></div>
@@ -890,6 +1151,59 @@
         <input type="text" id="todoNameInput" class="modal-input" placeholder="提醒名称（例：换垫料）" maxlength="20">
         <select id="cycleTypeSelect" class="modal-select"><option value="daily">每天 (每1天)</option><option value="weekly">每周 (每7天)</option><option value="monthly">每月 (每30天)</option></select>
         <div class="modal-buttons"><div class="modal-btn modal-cancel" id="closeModalBtn">取消</div><div class="modal-btn modal-confirm" id="confirmTodoBtn">保存</div></div>
+    </div>
+</div>
+
+<!-- 用户信息编辑模态框 -->
+<div id="profileEditModal" class="modal-mask hidden">
+    <div class="modal-container" style="width: 320px;">
+        <div class="modal-title">编辑个人信息</div>
+        <div class="form-group">
+            <label class="form-label">头像</label>
+            <div class="avatar-selector" id="userAvatarSelector">
+                <div class="avatar-option" data-emoji="🐻‍❄️">🐻‍❄️</div>
+                <div class="avatar-option" data-emoji="🐱">🐱</div>
+                <div class="avatar-option" data-emoji="🐶">🐶</div>
+                <div class="avatar-option" data-emoji="🐰">🐰</div>
+                <div class="avatar-option" data-emoji="🐼">🐼</div>
+            </div>
+            <div style="margin-top: 8px;">
+                <input type="file" id="userAvatarUpload" accept="image/*" capture="environment" style="display:none;">
+                <button class="upload-image-btn" id="triggerUserAvatarUpload">📸 拍照/相册上传</button>
+            </div>
+            <div id="userCustomAvatarPreview" style="margin-top:8px;"></div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">昵称</label>
+            <input type="text" id="userNicknameInput" class="form-input" placeholder="输入昵称" maxlength="12">
+        </div>
+        <div class="modal-buttons">
+            <div class="modal-btn modal-cancel" id="cancelProfileEdit">取消</div>
+            <div class="modal-btn modal-confirm" id="confirmProfileEdit">保存</div>
+        </div>
+    </div>
+</div>
+
+<!-- 删除确认模态框 -->
+<div id="deleteConfirmModal" class="modal-mask hidden">
+    <div class="modal-container">
+        <div class="modal-title" style="color:#C23D3D;">⚠️ 确认删除</div>
+        <p style="font-size:14px; color:#6B5A48; margin-bottom:16px;">此操作不可恢复，确定要继续吗？</p>
+        <div class="modal-buttons">
+            <div class="modal-btn modal-cancel" id="cancelDelete">取消</div>
+            <div class="modal-btn" style="background:#C23D3D; color:white;" id="confirmDelete">确认删除</div>
+        </div>
+    </div>
+</div>
+
+<!-- 文档查看模态框 -->
+<div id="documentModal" class="modal-mask hidden">
+    <div class="modal-container" style="width:320px; max-height:80vh; overflow-y:auto;">
+        <div class="modal-title" id="documentTitle">标题</div>
+        <div class="document-content" id="documentContent"></div>
+        <div class="modal-buttons">
+            <div class="modal-btn modal-confirm" id="closeDocumentModal" style="flex:none; width:100%;">关闭</div>
+        </div>
     </div>
 </div>
 

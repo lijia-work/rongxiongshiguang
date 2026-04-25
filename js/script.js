@@ -4,6 +4,96 @@ let currentPetId = null;        // 当前详情页展示的宠物id
 let editPetId = null;           // 正在编辑的宠物id (null为新建)
 let searchKeyword = '';
 
+// ---------- 用户信息数据模型 ----------
+let userProfile = {
+    avatar: '🐻‍❄️',
+    avatarType: 'emoji',
+    nickname: '小熊饲养员'
+};
+
+function loadUserProfile() {
+    const stored = localStorage.getItem('userProfile');
+    if (stored) userProfile = JSON.parse(stored);
+}
+
+function saveUserProfile() {
+    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+}
+
+function updateProfileDisplay() {
+    const avatarEl = document.getElementById('userAvatar');
+    if (userProfile.avatarType === 'image') {
+        avatarEl.innerHTML = `<img src="${userProfile.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+    } else {
+        avatarEl.innerText = userProfile.avatar;
+    }
+    document.getElementById('userName').innerText = userProfile.nickname;
+}
+
+// ---------- 消息通知设置数据模型 ----------
+let notificationSettings = {
+    enabled: true,
+    soundEnabled: true,
+    vibrationEnabled: true,
+    doNotDisturb: {
+        enabled: false,
+        startTime: '22:00',
+        endTime: '08:00'
+    }
+};
+
+let systemMessages = [
+    { id: 1, type: 'version', title: '版本更新', content: '绒熊时光 v2.0 已发布，新增日记功能、体重记录、用户信息编辑等众多新功能！', date: '2025-04-25', read: false },
+    { id: 2, type: 'announcement', title: '系统公告', content: '感谢您使用绒熊时光，祝您和小熊生活愉快！如有问题请通过意见反馈联系我们。', date: '2025-04-15', read: true },
+    { id: 3, type: 'notification', title: '饲养提醒', content: '记得给小熊换垫料哦~', date: '2025-04-20', read: true }
+];
+
+function loadNotificationSettings() {
+    const stored = localStorage.getItem('notificationSettings');
+    if (stored) notificationSettings = JSON.parse(stored);
+}
+
+function saveNotificationSettings() {
+    localStorage.setItem('notificationSettings', JSON.stringify(notificationSettings));
+}
+
+// ---------- 意见反馈数据模型 ----------
+let feedbackList = [];
+let feedbackImages = [];
+let currentFeedbackCategory = 'bug';
+
+const feedbackCategories = [
+    { id: 'bug', label: 'Bug反馈', icon: '🐛' },
+    { id: 'feature', label: '功能建议', icon: '💡' },
+    { id: 'content', label: '内容建议', icon: '📝' },
+    { id: 'ui', label: 'UI体验', icon: '🎨' },
+    { id: 'other', label: '其他', icon: '💬' }
+];
+
+function loadFeedbackList() {
+    const stored = localStorage.getItem('feedbackList');
+    if (stored) feedbackList = JSON.parse(stored);
+}
+
+function saveFeedbackList() {
+    localStorage.setItem('feedbackList', JSON.stringify(feedbackList));
+}
+
+// ---------- 邀请统计数据 ----------
+let inviteStats = {
+    count: 0,
+    rewards: 0
+};
+
+function loadInviteStats() {
+    const stored = localStorage.getItem('inviteStats');
+    if (stored) inviteStats = JSON.parse(stored);
+}
+
+function saveInviteStats() {
+    localStorage.setItem('inviteStats', JSON.stringify(inviteStats));
+}
+
 // 辅助函数：计算陪伴天数（基于到家日期，若死亡则截至死亡日期）
 function calcCompanionDays(homeDateStr, deathDateStr) {
     if (!homeDateStr) return 0;
@@ -175,6 +265,11 @@ function showHome() {
     document.getElementById('diaryListPage').style.display = 'none';
     document.getElementById('diaryCreatePage').style.display = 'none';
     document.getElementById('weightPage').style.display = 'none';
+    document.getElementById('notificationPage').style.display = 'none';
+    document.getElementById('privacyPage').style.display = 'none';
+    document.getElementById('aboutPage').style.display = 'none';
+    document.getElementById('feedbackPage').style.display = 'none';
+    document.getElementById('invitePage').style.display = 'none';
     document.getElementById('bottomNav').style.display = 'flex';
     renderPetList();
     updateActiveNav('home');
@@ -190,10 +285,243 @@ function showProfile() {
     document.getElementById('diaryListPage').style.display = 'none';
     document.getElementById('diaryCreatePage').style.display = 'none';
     document.getElementById('weightPage').style.display = 'none';
+    document.getElementById('notificationPage').style.display = 'none';
+    document.getElementById('privacyPage').style.display = 'none';
+    document.getElementById('aboutPage').style.display = 'none';
+    document.getElementById('feedbackPage').style.display = 'none';
+    document.getElementById('invitePage').style.display = 'none';
     document.getElementById('bottomNav').style.display = 'flex';
+    updateProfileDisplay();
     updateActiveNav('profile');
 }
+
+// ---------- 新增页面导航函数 ----------
+function showNotificationPage() {
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById('notificationPage').style.display = 'block';
+    document.getElementById('bottomNav').style.display = 'none';
+    updateNotificationUI();
+    renderSystemMessages();
+}
+
+function showPrivacyPage() {
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById('privacyPage').style.display = 'block';
+    document.getElementById('bottomNav').style.display = 'none';
+}
+
+function showAboutPage() {
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById('aboutPage').style.display = 'block';
+    document.getElementById('bottomNav').style.display = 'none';
+}
+
+function showFeedbackPage() {
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById('feedbackPage').style.display = 'block';
+    document.getElementById('bottomNav').style.display = 'none';
+    renderCategorySelector();
+    renderFeedbackHistory();
+}
+
+function showInvitePage() {
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById('invitePage').style.display = 'block';
+    document.getElementById('bottomNav').style.display = 'none';
+    document.getElementById('inviteInviterName').innerText = userProfile.nickname;
+    document.getElementById('inviteCount').innerText = inviteStats.count;
+    document.getElementById('rewardCount').innerText = inviteStats.rewards;
+    generateQRCode();
+}
 function updateActiveNav(active) { /*样式略*/ }
+
+// ---------- 新增辅助函数 ----------
+function updateNotificationUI() {
+    document.getElementById('notificationToggle').classList.toggle('active', notificationSettings.enabled);
+    document.getElementById('soundToggle').classList.toggle('active', notificationSettings.soundEnabled);
+    document.getElementById('vibrationToggle').classList.toggle('active', notificationSettings.vibrationEnabled);
+    document.getElementById('dndToggle').classList.toggle('active', notificationSettings.doNotDisturb.enabled);
+    document.getElementById('dndTimeSelector').style.display = notificationSettings.doNotDisturb.enabled ? 'block' : 'none';
+    document.getElementById('dndStartTime').value = notificationSettings.doNotDisturb.startTime;
+    document.getElementById('dndEndTime').value = notificationSettings.doNotDisturb.endTime;
+    document.getElementById('notificationStatus').innerText = (notificationSettings.enabled ? '开' : '关') + ' ›';
+}
+
+function renderSystemMessages() {
+    const container = document.getElementById('systemMessagesList');
+    let html = '';
+    systemMessages.forEach(msg => {
+        html += `<div class="message-card">
+            <div class="message-header">
+                <span class="message-title">${msg.title}${!msg.read ? '<span class="message-unread-dot"></span>' : ''}</span>
+                <span class="message-date">${msg.date}</span>
+            </div>
+            <div class="message-content">${msg.content}</div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function renderCategorySelector() {
+    const container = document.getElementById('feedbackCategorySelector');
+    let html = '';
+    feedbackCategories.forEach((cat, idx) => {
+        html += `<div class="category-option ${idx === 0 ? 'selected' : ''}" data-id="${cat.id}">${cat.icon} ${cat.label}</div>`;
+    });
+    container.innerHTML = html;
+    currentFeedbackCategory = 'bug';
+    container.querySelectorAll('.category-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            container.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+            currentFeedbackCategory = opt.dataset.id;
+        });
+    });
+}
+
+function renderFeedbackImages() {
+    const container = document.getElementById('feedbackImagePreview');
+    container.innerHTML = '';
+    feedbackImages.forEach((img, idx) => {
+        const div = document.createElement('div');
+        div.className = 'preview-item';
+        const imgEl = document.createElement('img');
+        imgEl.src = img;
+        const removeSpan = document.createElement('span');
+        removeSpan.innerText = '✕';
+        removeSpan.className = 'remove-img';
+        removeSpan.onclick = (e) => {
+            e.stopPropagation();
+            feedbackImages.splice(idx, 1);
+            renderFeedbackImages();
+        };
+        div.appendChild(imgEl);
+        div.appendChild(removeSpan);
+        container.appendChild(div);
+    });
+}
+
+function renderFeedbackHistory() {
+    const container = document.getElementById('feedbackHistoryList');
+    if (feedbackList.length === 0) {
+        container.innerHTML = '<div class="no-result">暂无反馈记录</div>';
+        return;
+    }
+    let html = '';
+    feedbackList.forEach(fb => {
+        const cat = feedbackCategories.find(c => c.id === fb.category);
+        const statusText = { pending: '待处理', processing: '处理中', resolved: '已解决' };
+        html += `<div class="feedback-history-card">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span>${cat ? cat.icon : ''} ${cat ? cat.label : fb.category}</span>
+                <span class="feedback-status ${fb.status}">${statusText[fb.status]}</span>
+            </div>
+            <div style="font-size:13px; color:#3E2C1F;">${fb.description.substring(0, 50)}${fb.description.length > 50 ? '...' : ''}</div>
+            <div style="font-size:12px; color:#B3A28E; margin-top:8px;">${new Date(fb.submitTime).toLocaleDateString()}</div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function generateInviteCode() {
+    return btoa(userProfile.nickname + Date.now()).substring(0, 8);
+}
+
+function generateQRCode() {
+    const canvas = document.getElementById('inviteQRCanvas');
+    const ctx = canvas.getContext('2d');
+    const size = 90;
+    ctx.clearRect(0, 0, size, size);
+
+    // 简单的二维码模拟图案
+    ctx.fillStyle = '#D9A13B';
+    const moduleSize = 6;
+    const margin = 6;
+
+    // 绘制定位图案
+    function drawFinderPattern(x, y) {
+        ctx.fillRect(x, y, moduleSize * 3, moduleSize * 3);
+        ctx.fillStyle = 'white';
+        ctx.fillRect(x + moduleSize, y + moduleSize, moduleSize, moduleSize);
+        ctx.fillStyle = '#D9A13B';
+    }
+
+    drawFinderPattern(margin, margin);
+    drawFinderPattern(size - margin - moduleSize * 3, margin);
+    drawFinderPattern(margin, size - margin - moduleSize * 3);
+
+    // 绘制随机数据模块
+    const code = generateInviteCode();
+    ctx.fillStyle = '#D9A13B';
+    for (let i = 0; i < code.length; i++) {
+        const x = margin + moduleSize * 4 + (i % 5) * moduleSize;
+        const y = margin + moduleSize * 4 + Math.floor(i / 5) * moduleSize;
+        if (code.charCodeAt(i) % 2 === 0) {
+            ctx.fillRect(x, y, moduleSize - 1, moduleSize - 1);
+        }
+    }
+
+    // 添加更多随机模块
+    for (let i = 0; i < 20; i++) {
+        const x = margin + Math.floor(Math.random() * 10) * moduleSize;
+        const y = margin + Math.floor(Math.random() * 10) * moduleSize;
+        if (Math.random() > 0.5) {
+            ctx.fillRect(x, y, moduleSize - 1, moduleSize - 1);
+        }
+    }
+}
+
+function saveInviteCard() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 300;
+    canvas.height = 400;
+    const ctx = canvas.getContext('2d');
+
+    // 绘制渐变背景
+    const gradient = ctx.createLinearGradient(0, 0, 300, 400);
+    gradient.addColorStop(0, '#D9A13B');
+    gradient.addColorStop(1, '#E8B84A');
+    ctx.fillStyle = gradient;
+    ctx.roundRect(0, 0, 300, 400, 24);
+    ctx.fill();
+
+    // 绘制标题
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 24px 微软雅黑';
+    ctx.textAlign = 'center';
+    ctx.fillText('绒熊时光', 150, 50);
+
+    // 绘制logo
+    ctx.font = '48px serif';
+    ctx.fillText('🐻', 150, 110);
+
+    // 绘制邀请文字
+    ctx.font = 'bold 20px 微软雅黑';
+    ctx.fillText('我的小熊在等我！', 150, 170);
+
+    ctx.font = '14px 微软雅黑';
+    ctx.fillText('来一起记录与毛孩子的美好时光吧~', 150, 200);
+
+    ctx.font = '13px 微软雅黑';
+    ctx.fillText(`${userProfile.nickname} 邀请你加入`, 150, 240);
+
+    // 绘制二维码区域
+    ctx.fillStyle = 'white';
+    ctx.roundRect(100, 270, 100, 100, 12);
+    ctx.fill();
+
+    ctx.fillStyle = '#D9A13B';
+    ctx.font = '12px 微软雅黑';
+    ctx.fillText('扫码加入', 150, 325);
+
+    // 导出图片
+    const link = document.createElement('a');
+    link.download = `绒熊时光_邀请海报.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+
+    alert('邀请卡片已保存到相册');
+}
 
 // 初始化默认宠物（不含购买日期）
 function initDefaultPets() {
@@ -582,7 +910,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         e.target.value = '';
     });
-    document.getElementById('searchBtn').onclick = () => { let kw = prompt('🔍 输入宠物名字'); if(kw !== null) { searchKeyword = kw; renderPetList(); } };
+    // 搜索栏展开逻辑
+    const searchBtn = document.getElementById('searchBtn');
+    const searchExpandable = document.getElementById('searchExpandable');
+    const searchInput = document.getElementById('searchInput');
+
+    searchBtn.addEventListener('click', () => {
+        searchExpandable.style.display = 'flex';
+        searchBtn.style.display = 'none';
+        searchInput.focus();
+    });
+
+    searchInput.addEventListener('input', (e) => {
+        searchKeyword = e.target.value.trim();
+        renderPetList();
+    });
+
+    searchInput.addEventListener('blur', () => {
+        if (searchInput.value.trim() === '') {
+            searchExpandable.style.display = 'none';
+            searchBtn.style.display = 'inline-flex';
+            searchKeyword = '';
+        }
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            searchKeyword = searchInput.value.trim();
+            renderPetList();
+            searchInput.blur();
+        }
+        if (e.key === 'Escape') {
+            searchExpandable.style.display = 'none';
+            searchBtn.style.display = 'inline-flex';
+            searchInput.value = '';
+            searchKeyword = '';
+            renderPetList();
+        }
+    });
     
     // 体重记录入口
     const weightEntry = document.getElementById('weightEntryBtn');
@@ -607,5 +972,326 @@ document.addEventListener('DOMContentLoaded', () => {
     initDefaultPets();
     initDefaultTodos();
     loadDiaries();
+    loadUserProfile();
+    loadNotificationSettings();
+    loadFeedbackList();
+    loadInviteStats();
     showHome();
+
+    // ---------- 用户信息编辑功能 ----------
+    let selectedUserAvatar = '🐻‍❄️';
+    let uploadedUserAvatarBase64 = null;
+
+    document.getElementById('editProfileBtn').addEventListener('click', () => {
+        document.getElementById('userNicknameInput').value = userProfile.nickname;
+        if (userProfile.avatarType === 'emoji') {
+            selectedUserAvatar = userProfile.avatar;
+            uploadedUserAvatarBase64 = null;
+            document.getElementById('userCustomAvatarPreview').innerHTML = '';
+            document.querySelectorAll('#userAvatarSelector .avatar-option').forEach(opt => {
+                opt.classList.toggle('selected', opt.getAttribute('data-emoji') === userProfile.avatar);
+            });
+        } else if (userProfile.avatarType === 'image') {
+            uploadedUserAvatarBase64 = userProfile.avatar;
+            selectedUserAvatar = null;
+            document.getElementById('userCustomAvatarPreview').innerHTML = `<img src="${userProfile.avatar}" class="preview-img">`;
+            document.querySelectorAll('#userAvatarSelector .avatar-option').forEach(opt => opt.classList.remove('selected'));
+        }
+        document.getElementById('profileEditModal').classList.remove('hidden');
+    });
+
+    document.getElementById('triggerUserAvatarUpload').addEventListener('click', () => {
+        document.getElementById('userAvatarUpload').click();
+    });
+
+    document.getElementById('userAvatarUpload').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                uploadedUserAvatarBase64 = ev.target.result;
+                selectedUserAvatar = null;
+                document.getElementById('userCustomAvatarPreview').innerHTML = `<img src="${uploadedUserAvatarBase64}" class="preview-img">`;
+                document.querySelectorAll('#userAvatarSelector .avatar-option').forEach(opt => opt.classList.remove('selected'));
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.querySelectorAll('#userAvatarSelector .avatar-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            selectedUserAvatar = opt.getAttribute('data-emoji');
+            uploadedUserAvatarBase64 = null;
+            document.getElementById('userCustomAvatarPreview').innerHTML = '';
+            document.querySelectorAll('#userAvatarSelector .avatar-option').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+        });
+    });
+
+    document.getElementById('cancelProfileEdit').addEventListener('click', () => {
+        document.getElementById('profileEditModal').classList.add('hidden');
+    });
+
+    document.getElementById('confirmProfileEdit').addEventListener('click', () => {
+        const nickname = document.getElementById('userNicknameInput').value.trim() || '小熊饲养员';
+        userProfile.nickname = nickname;
+        if (uploadedUserAvatarBase64) {
+            userProfile.avatar = uploadedUserAvatarBase64;
+            userProfile.avatarType = 'image';
+        } else if (selectedUserAvatar) {
+            userProfile.avatar = selectedUserAvatar;
+            userProfile.avatarType = 'emoji';
+        }
+        saveUserProfile();
+        updateProfileDisplay();
+        document.getElementById('profileEditModal').classList.add('hidden');
+    });
+
+    document.getElementById('profileEditModal').addEventListener('click', (e) => {
+        if (e.target.id === 'profileEditModal') {
+            document.getElementById('profileEditModal').classList.add('hidden');
+        }
+    });
+
+    // ---------- 设置页面导航 ----------
+    document.getElementById('notificationSettingsItem').addEventListener('click', showNotificationPage);
+    document.getElementById('privacySettingsItem').addEventListener('click', showPrivacyPage);
+    document.getElementById('aboutItem').addEventListener('click', showAboutPage);
+    document.getElementById('feedbackItem').addEventListener('click', showFeedbackPage);
+    document.getElementById('inviteItem').addEventListener('click', showInvitePage);
+
+    // ---------- 消息通知页面 ----------
+    document.getElementById('backFromNotification').addEventListener('click', showProfile);
+
+    document.getElementById('notificationToggle').addEventListener('click', function() {
+        this.classList.toggle('active');
+        notificationSettings.enabled = this.classList.contains('active');
+        document.getElementById('notificationStatus').innerText = (notificationSettings.enabled ? '开' : '关') + ' ›';
+        saveNotificationSettings();
+    });
+
+    document.getElementById('soundToggle').addEventListener('click', function() {
+        this.classList.toggle('active');
+        notificationSettings.soundEnabled = this.classList.contains('active');
+        saveNotificationSettings();
+    });
+
+    document.getElementById('vibrationToggle').addEventListener('click', function() {
+        this.classList.toggle('active');
+        notificationSettings.vibrationEnabled = this.classList.contains('active');
+        saveNotificationSettings();
+    });
+
+    document.getElementById('dndToggle').addEventListener('click', function() {
+        this.classList.toggle('active');
+        notificationSettings.doNotDisturb.enabled = this.classList.contains('active');
+        document.getElementById('dndTimeSelector').style.display = notificationSettings.doNotDisturb.enabled ? 'block' : 'none';
+        saveNotificationSettings();
+    });
+
+    document.getElementById('dndStartTime').addEventListener('change', (e) => {
+        notificationSettings.doNotDisturb.startTime = e.target.value;
+        saveNotificationSettings();
+    });
+
+    document.getElementById('dndEndTime').addEventListener('change', (e) => {
+        notificationSettings.doNotDisturb.endTime = e.target.value;
+        saveNotificationSettings();
+    });
+
+    // ---------- 隐私设置页面 ----------
+    document.getElementById('backFromPrivacy').addEventListener('click', showProfile);
+
+    document.getElementById('exportDataBtn').addEventListener('click', () => {
+        const data = {
+            pets: pets,
+            todos: todoList,
+            diaries: diaries,
+            profile: userProfile,
+            notificationSettings: notificationSettings,
+            feedbackList: feedbackList,
+            exportDate: new Date().toISOString()
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `绒熊时光_数据导出_${new Date().toLocaleDateString()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('clearCacheBtn').addEventListener('click', () => {
+        if (confirm('确定清除缓存？这不会删除您的数据。')) {
+            alert('缓存已清除');
+        }
+    });
+
+    let deleteType = null;
+    document.getElementById('deleteAccountBtn').addEventListener('click', () => {
+        deleteType = 'account';
+        document.getElementById('deleteConfirmModal').classList.remove('hidden');
+    });
+
+    document.getElementById('deleteAllDataBtn').addEventListener('click', () => {
+        deleteType = 'data';
+        document.getElementById('deleteConfirmModal').classList.remove('hidden');
+    });
+
+    document.getElementById('cancelDelete').addEventListener('click', () => {
+        document.getElementById('deleteConfirmModal').classList.add('hidden');
+    });
+
+    document.getElementById('confirmDelete').addEventListener('click', () => {
+        if (deleteType === 'data' || deleteType === 'account') {
+            localStorage.clear();
+            alert(deleteType === 'account' ? '账户已注销' : '数据已删除');
+            location.reload();
+        }
+    });
+
+    document.getElementById('deleteConfirmModal').addEventListener('click', (e) => {
+        if (e.target.id === 'deleteConfirmModal') {
+            document.getElementById('deleteConfirmModal').classList.add('hidden');
+        }
+    });
+
+    // ---------- 关于我们页面 ----------
+    document.getElementById('backFromAbout').addEventListener('click', showProfile);
+
+    const documents = {
+        agreement: {
+            title: '用户服务协议',
+            content: `<h4>一、服务条款</h4>
+            <p>欢迎使用绒熊时光。本协议是您与绒熊时光团队之间的法律协议。使用本应用即表示您同意遵守本协议的所有条款。</p>
+            <h4>二、用户责任</h4>
+            <p>您承诺使用本应用时遵守相关法律法规，不利用本应用从事任何违法活动。您对您在本应用中创建的内容负责。</p>
+            <h4>三、知识产权</h4>
+            <p>本应用的所有内容，包括但不限于文字、图片、软件代码等，均受知识产权法保护。未经许可，不得复制、传播或用于商业目的。</p>
+            <h4>四、服务变更</h4>
+            <p>我们保留随时修改或终止服务的权利，恕不另行通知。我们将尽合理努力通知您任何重大变更。</p>
+            <h4>五、免责声明</h4>
+            <p>本应用按"现状"提供服务，不提供任何明示或暗示的保证。我们不对因使用本应用而产生的任何损失负责。</p>`
+        },
+        privacy: {
+            title: '隐私政策',
+            content: `<h4>一、信息收集</h4>
+            <p>我们收集的信息包括：您创建的宠物档案、日记内容、体重记录等。所有数据均存储在您的设备本地，我们不会上传到服务器。</p>
+            <h4>二、信息使用</h4>
+            <p>您的信息仅用于提供和改善服务。我们不会将您的个人信息用于其他目的。</p>
+            <h4>三、信息保护</h4>
+            <p>我们采用安全措施保护您的信息。由于数据存储在本地，请您妥善保管您的设备。</p>
+            <h4>四、信息共享</h4>
+            <p>我们承诺不会将您的数据分享给任何第三方，除非法律要求或经您明确同意。</p>
+            <h4>五、您的权利</h4>
+            <p>您有权查看、修改、导出和删除您的数据。您可以在应用内的隐私设置中执行这些操作。</p>`
+        },
+        disclaimer: {
+            title: '免责声明',
+            content: `<h4>重要提示</h4>
+            <p>本应用仅供参考和娱乐用途，不构成专业兽医建议。</p>
+            <h4>饲养建议</h4>
+            <p>本应用中提供的饲养建议仅供参考，不替代专业兽医诊疗。如果您的宠物出现健康问题，请及时咨询专业兽医。</p>
+            <h4>数据安全</h4>
+            <p>本应用数据存储在您的设备本地，请您定期导出备份。我们不对因设备损坏、丢失等原因导致的数据丢失负责。</p>
+            <h4>责任限制</h4>
+            <p>在法律允许的最大范围内，我们不对因使用或无法使用本应用而产生的任何直接、间接、附带、特殊或后果性损害负责。</p>`
+        }
+    };
+
+    document.getElementById('viewUserAgreement').addEventListener('click', () => {
+        document.getElementById('documentTitle').innerText = documents.agreement.title;
+        document.getElementById('documentContent').innerHTML = documents.agreement.content;
+        document.getElementById('documentModal').classList.remove('hidden');
+    });
+
+    document.getElementById('viewPrivacyPolicy').addEventListener('click', () => {
+        document.getElementById('documentTitle').innerText = documents.privacy.title;
+        document.getElementById('documentContent').innerHTML = documents.privacy.content;
+        document.getElementById('documentModal').classList.remove('hidden');
+    });
+
+    document.getElementById('viewDisclaimer').addEventListener('click', () => {
+        document.getElementById('documentTitle').innerText = documents.disclaimer.title;
+        document.getElementById('documentContent').innerHTML = documents.disclaimer.content;
+        document.getElementById('documentModal').classList.remove('hidden');
+    });
+
+    document.getElementById('closeDocumentModal').addEventListener('click', () => {
+        document.getElementById('documentModal').classList.add('hidden');
+    });
+
+    document.getElementById('documentModal').addEventListener('click', (e) => {
+        if (e.target.id === 'documentModal') {
+            document.getElementById('documentModal').classList.add('hidden');
+        }
+    });
+
+    // ---------- 意见反馈页面 ----------
+    document.getElementById('backFromFeedback').addEventListener('click', showProfile);
+
+    document.getElementById('uploadFeedbackImage').addEventListener('click', () => {
+        document.getElementById('feedbackImageInput').click();
+    });
+
+    document.getElementById('feedbackImageInput').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        files.forEach(file => {
+            if (feedbackImages.length >= 3) { alert('最多上传3张截图'); return; }
+            const reader = new FileReader();
+            reader.onload = ev => {
+                feedbackImages.push(ev.target.result);
+                renderFeedbackImages();
+            };
+            reader.readAsDataURL(file);
+        });
+        e.target.value = '';
+    });
+
+    document.getElementById('submitFeedbackBtn').addEventListener('click', () => {
+        const description = document.getElementById('feedbackDescription').value.trim();
+        if (!description) {
+            alert('请描述您的问题或建议');
+            return;
+        }
+        const feedback = {
+            id: Date.now(),
+            category: currentFeedbackCategory,
+            description: description,
+            images: [...feedbackImages],
+            contact: document.getElementById('feedbackContact').value.trim(),
+            status: 'pending',
+            submitTime: new Date().toISOString()
+        };
+        feedbackList.unshift(feedback);
+        saveFeedbackList();
+        alert('感谢您的反馈！我们会认真处理。');
+        document.getElementById('feedbackDescription').value = '';
+        document.getElementById('feedbackContact').value = '';
+        feedbackImages = [];
+        renderFeedbackImages();
+        renderFeedbackHistory();
+    });
+
+    // ---------- 邀请好友页面 ----------
+    document.getElementById('backFromInvite').addEventListener('click', showProfile);
+
+    document.getElementById('shareToWechat').addEventListener('click', () => {
+        alert('正在调用微信分享...（需要微信SDK支持）');
+    });
+
+    document.getElementById('shareToMoments').addEventListener('click', () => {
+        alert('正在调用朋友圈分享...（需要微信SDK支持）');
+    });
+
+    document.getElementById('saveImage').addEventListener('click', saveInviteCard);
+
+    document.getElementById('copyLink').addEventListener('click', () => {
+        const link = `https://rongxiong.example.com/invite?code=${generateInviteCode()}`;
+        navigator.clipboard.writeText(link).then(() => {
+            alert('链接已复制到剪贴板');
+        }).catch(() => {
+            alert('复制失败，请手动复制：' + link);
+        });
+    });
 });
