@@ -1083,3 +1083,60 @@ canvas#weightChartCanvas {
     color: #B3A28E;
     margin-top: 4px;
 }
+
+/* ========= 新增：Toast提示样式 ========= */
+.toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 14px;
+    z-index: 1000;
+    transition: opacity 0.3s;
+}
+.toast.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ========= 新增：表单输入框增强样式 ========= */
+.form-input:focus, .form-select:focus {
+    border-color: #D9A13B;
+    box-shadow: 0 0 0 2px rgba(217, 161, 59, 0.2);
+    outline: none;
+}
+
+.form-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border-radius: 24px;
+    border: 1px solid #E8DDD2;
+    font-size: 14px;
+    resize: none;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-textarea:focus {
+    border-color: #D9A13B;
+    box-shadow: 0 0 0 2px rgba(217, 161, 59, 0.2);
+    outline: none;
+}
+
+/* 错误状态 */
+.form-input.error, .form-textarea.error {
+    border-color: #C23D3D;
+    background: #FFF5F5;
+}
+
+/* 错误提示文字 */
+.error-text {
+    color: #C23D3D;
+    font-size: 12px;
+    margin-top: 4px;
+}

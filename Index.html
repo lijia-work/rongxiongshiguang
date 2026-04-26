@@ -840,7 +840,7 @@
         <div class="create-diary-container">
             <div class="form-group"><label class="form-label">🐾 关联宠物 *</label><select id="diaryPetSelect" class="form-select"></select></div>
             <div class="form-group"><label class="form-label">📅 日记日期 *</label><input type="date" id="diaryDate" class="form-input"></div>
-            <div class="form-group"><label class="form-label">📝 日记内容</label><textarea id="diaryContent" class="form-textarea" style="width:100%; padding:12px; border-radius:24px; border:1px solid #E8DDD2; min-height:120px;" placeholder="记录和小熊的日常点滴……"></textarea></div>
+            <div class="form-group"><label class="form-label">📝 日记内容</label><textarea id="diaryContent" class="form-textarea" placeholder="记录和小熊的日常点滴……"></textarea></div>
             <div class="form-group"><label class="form-label">🖼️ 图片/视频 (支持图片)</label>
                 <div class="image-upload-area"><div class="upload-btn-sm" id="uploadDiaryMediaBtn">+ 上传图片</div><input type="file" id="diaryMediaInput" accept="image/*" multiple style="display:none;"></div>
                 <div id="diaryImagePreviewList" class="image-preview-list"></div>
@@ -991,24 +991,9 @@
             <div class="about-section">
                 <div class="about-section-title">📝 更新日志</div>
                 <div class="update-log-card">
-                    <div class="update-version">v2.0.0 (2025-04-25)</div>
-                    <ul class="update-list">
-                        <li>✨ 新增日记功能，记录与小熊的每一天</li>
-                        <li>✨ 新增体重记录，追踪小熊健康</li>
-                        <li>✨ 新增用户信息编辑功能</li>
-                        <li>✨ 新增消息通知、隐私设置、意见反馈等功能</li>
-                        <li>🐛 修复若干已知问题</li>
-                    </ul>
-                    <div class="update-version">v1.5.0 (2025-03-15)</div>
-                    <ul class="update-list">
-                        <li>✨ 新增饲养提醒功能</li>
-                        <li>🎨 优化界面设计</li>
-                    </ul>
-                    <div class="update-version">v1.0.0 (2025-01-01)</div>
+                    <div class="update-version">v1.0.0 (2026-04-26)</div>
                     <ul class="update-list">
                         <li>🎉 首次发布</li>
-                        <li>✨ 宠物档案管理</li>
-                        <li>✨ 基础饲养记录</li>
                     </ul>
                 </div>
             </div>
@@ -1044,7 +1029,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label">问题描述</label>
-                <textarea id="feedbackDescription" class="form-textarea" style="width:100%; min-height:120px; padding:12px; border-radius:20px; border:1px solid #E8DDD2; font-size:14px; resize:none;" placeholder="请详细描述您遇到的问题或建议..."></textarea>
+                <textarea id="feedbackDescription" class="form-textarea" placeholder="请详细描述您遇到的问题或建议..."></textarea>
             </div>
             <div class="form-group">
                 <label class="form-label">截图上传（可选）</label>
@@ -1206,6 +1191,9 @@
         </div>
     </div>
 </div>
+
+<!-- Toast提示组件 -->
+<div id="toast" class="toast hidden"></div>
 
 <script src="js/script.js"></script>
 </body>

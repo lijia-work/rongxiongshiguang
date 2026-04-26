@@ -230,13 +230,25 @@ function getCurrentAvatar() {
 
 function savePetFromForm() {
     const name = document.getElementById('petName').value.trim();
-    if (!name) { alert('请填写宠物昵称'); return; }
+    if (!name) { showToast('请填写宠物昵称'); return; }
+    if (name.length < 2 || name.length > 12) { showToast('昵称长度应为2-12个字符'); return; }
+
     const gender = document.getElementById('petGender').value;
-    const breed = document.getElementById('petBreed').value;
+    const breed = document.getElementById('petBreed').value.trim();
     const birthDate = document.getElementById('birthDate').value;
     const deathDate = document.getElementById('deathDate').value;
     const homeDate = document.getElementById('homeDate').value;
-    if (!homeDate) { alert('请填写到家日期，用于计算陪伴天数'); return; }
+
+    if (!homeDate) { showToast('请填写到家日期'); return; }
+
+    const today = new Date().toISOString().slice(0, 10);
+    if (homeDate > today) { showToast('到家日期不能晚于今天'); return; }
+
+    if (birthDate && deathDate && birthDate > deathDate) {
+        showToast('出生日期不能晚于死亡日期');
+        return;
+    }
+
     const avatarFinal = getCurrentAvatar();
     if (editPetId !== null) {
         const idx = pets.findIndex(p => p.id === editPetId);
@@ -248,8 +260,8 @@ function savePetFromForm() {
         pets.push({ id: newId, name, gender, breed, birthDate, deathDate, homeDate, avatar: avatarFinal });
     }
     localStorage.setItem('petsData', JSON.stringify(pets));
+    showToast('保存成功');
     renderPetList();
-    // 保存后返回首页
     showHome();
 }
 
@@ -335,6 +347,15 @@ function showInvitePage() {
 }
 function updateActiveNav(active) { /*样式略*/ }
 
+// ---------- Toast提示函数 ----------
+function showToast(message, duration = 2000) {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.innerText = message;
+    toast.classList.remove('hidden');
+    setTimeout(() => toast.classList.add('hidden'), duration);
+}
+
 // ---------- 新增辅助函数 ----------
 function updateNotificationUI() {
     document.getElementById('notificationToggle').classList.toggle('active', notificationSettings.enabled);
@@ -349,6 +370,11 @@ function updateNotificationUI() {
 
 function renderSystemMessages() {
     const container = document.getElementById('systemMessagesList');
+    if (!container) return;
+    if (systemMessages.length === 0) {
+        container.innerHTML = '<div class="no-result">📭 暂无系统消息</div>';
+        return;
+    }
     let html = '';
     systemMessages.forEach(msg => {
         html += `<div class="message-card">
@@ -520,7 +546,7 @@ function saveInviteCard() {
     link.href = canvas.toDataURL('image/png');
     link.click();
 
-    alert('邀请卡片已保存到相册');
+    showToast('邀请卡片已保存');
 }
 
 // 初始化默认宠物（不含购买日期）
@@ -582,18 +608,44 @@ function renderTodoList() {
         });
     });
 }
-function markTodoComplete(id) { const todo = todoList.find(t=>t.id===id); if(todo){ todo.lastCompleteDate=getTodayStr(); renderTodoList(); } }
-function deleteTodoById(id) { todoList = todoList.filter(t=>t.id!==id); renderTodoList(); }
+function markTodoComplete(id) {
+    const todo = todoList.find(t => t.id === id);
+    if (todo) {
+        todo.lastCompleteDate = getTodayStr();
+        saveTodoList();
+        renderTodoList();
+    }
+}
+function deleteTodoById(id) {
+    todoList = todoList.filter(t => t.id !== id);
+    saveTodoList();
+    renderTodoList();
+}
+
+function saveTodoList() {
+    localStorage.setItem('todoListData', JSON.stringify(todoList));
+}
+
+function loadTodoList() {
+    const stored = localStorage.getItem('todoListData');
+    if (stored) todoList = JSON.parse(stored);
+}
 function openEditModal(id) { const todo=todoList.find(t=>t.id===id); if(todo){ editingTodoId=id; document.getElementById('modalTitle').innerText='编辑提醒'; document.getElementById('todoNameInput').value=todo.name; document.getElementById('cycleTypeSelect').value=todo.cycleType; document.getElementById('todoModal').classList.remove('hidden'); } }
 let editingTodoId = null;
 function addOrUpdateTodo(name, cycleType) {
-    if (!name.trim()) return alert('请填写提醒名称');
-    if(editingTodoId){
-        const idx=todoList.findIndex(t=>t.id===editingTodoId);
-        if(idx!==-1){ todoList[idx].name=name.trim(); todoList[idx].cycleType=cycleType; renderTodoList(); }
-        editingTodoId=null;
+    if (!name.trim()) return showToast('请填写提醒名称');
+    if (editingTodoId) {
+        const idx = todoList.findIndex(t => t.id === editingTodoId);
+        if (idx !== -1) {
+            todoList[idx].name = name.trim();
+            todoList[idx].cycleType = cycleType;
+            saveTodoList();
+            renderTodoList();
+        }
+        editingTodoId = null;
     } else {
-        todoList.push({ id:Date.now(), name:name.trim(), cycleType:cycleType, lastCompleteDate:getTodayStr() });
+        todoList.push({ id: Date.now(), name: name.trim(), cycleType: cycleType, lastCompleteDate: getTodayStr() });
+        saveTodoList();
         renderTodoList();
     }
     return true;
@@ -611,12 +663,17 @@ function updateHomeReminderPreview() {
 }
 function escapeHtml(str) { return str.replace(/[&<>]/g,function(m){return m==='&'?'&amp;':m==='<'?'&lt;':'&gt;';}); }
 function initDefaultTodos() {
-    if(todoList.length===0){
-        const today=getTodayStr();
-        const threeAgo=new Date(); threeAgo.setDate(threeAgo.getDate()-3);
-        todoList = [{ id:1001, name:'换垫料', cycleType:'weekly', lastCompleteDate:threeAgo.toISOString().slice(0,10) },
-                    { id:1002, name:'喂食营养糊', cycleType:'daily', lastCompleteDate:today },
-                    { id:1003, name:'体外驱虫', cycleType:'monthly', lastCompleteDate:today }];
+    loadTodoList();
+    if (todoList.length === 0) {
+        const today = getTodayStr();
+        const threeAgo = new Date();
+        threeAgo.setDate(threeAgo.getDate() - 3);
+        todoList = [
+            { id: 1001, name: '换垫料', cycleType: 'weekly', lastCompleteDate: threeAgo.toISOString().slice(0, 10) },
+            { id: 1002, name: '喂食营养糊', cycleType: 'daily', lastCompleteDate: today },
+            { id: 1003, name: '体外驱虫', cycleType: 'monthly', lastCompleteDate: today }
+        ];
+        saveTodoList();
     }
     renderTodoList();
 }
@@ -718,11 +775,17 @@ function renderImagePreview() {
 }
 function saveDiaryFromForm() {
     const petId = parseInt(document.getElementById('diaryPetSelect').value);
-    if (!petId) { alert('请选择关联宠物'); return; }
+    if (!petId) { showToast('请选择关联宠物'); return; }
     const date = document.getElementById('diaryDate').value;
-    if (!date) { alert('请选择日记日期'); return; }
+    if (!date) { showToast('请选择日记日期'); return; }
+
+    const today = new Date().toISOString().slice(0, 10);
+    if (date > today) { showToast('日记日期不能晚于今天'); return; }
+
     const content = document.getElementById('diaryContent').value.trim();
-    if (!content) { alert('请写下日记内容'); return; }
+    if (!content) { showToast('请写下日记内容'); return; }
+    if (content.length < 10) { showToast('日记内容至少10个字符'); return; }
+
     if (editingDiaryId) {
         const idx = diaries.findIndex(d => d.id === editingDiaryId);
         if (idx !== -1) diaries[idx] = { ...diaries[idx], petId, date, content, images: [...tempImagesBase64] };
@@ -730,6 +793,7 @@ function saveDiaryFromForm() {
         diaries.push({ id: Date.now(), petId, date, content, images: [...tempImagesBase64] });
     }
     saveDiariesToLocal();
+    showToast('日记保存成功');
     if (currentDiaryPetFilter && diaries.some(d => d.petId === currentDiaryPetFilter)) {
         renderDiaryList(currentDiaryPetFilter);
         document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
@@ -847,8 +911,10 @@ function renderWeightPage(petId) {
 function addWeightRecordHandler(petId) {
     const date = document.getElementById('weightDateInput').value;
     const weight = parseFloat(document.getElementById('weightValueInput').value);
-    if (!date) { alert('请选择日期'); return; }
-    if (isNaN(weight) || weight <= 0) { alert('请输入有效体重（克）'); return; }
+    if (!date) { showToast('请选择日期'); return; }
+    if (isNaN(weight) || weight <= 0) { showToast('请输入有效体重（克）'); return; }
+    if (weight < 10 || weight > 500) { showToast('体重范围应在10-500克之间'); return; }
+
     let records = getWeightRecords(petId);
     const existingIdx = records.findIndex(r => r.date === date);
     if (existingIdx !== -1) {
@@ -861,6 +927,7 @@ function addWeightRecordHandler(petId) {
     saveWeightRecords(petId, records);
     document.getElementById('weightDateInput').value = new Date().toISOString().slice(0,10);
     document.getElementById('weightValueInput').value = '';
+    showToast('记录保存成功');
     renderWeightPage(petId);
 }
 let currentWeightPetId = null;
@@ -894,7 +961,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeMenu = () => document.getElementById('actionOverlay').style.display = 'none';
     
     // 日记入口
-    document.getElementById('diaryEntryBtn').onclick = () => { if(currentPetId) { document.querySelectorAll('.page').forEach(p=>p.style.display='none'); renderDiaryList(currentPetId); document.getElementById('diaryListPage').style.display='block'; document.getElementById('bottomNav').style.display='none'; } else alert('请先选择小熊'); };
+    document.getElementById('diaryEntryBtn').onclick = () => { if(currentPetId) { document.querySelectorAll('.page').forEach(p=>p.style.display='none'); renderDiaryList(currentPetId); document.getElementById('diaryListPage').style.display='block'; document.getElementById('bottomNav').style.display='none'; } else showToast('请先选择小熊'); };
     document.getElementById('backFromDiaryList').onclick = () => { if(currentPetId) showPetDetail(currentPetId); else showHome(); };
     document.getElementById('createDiaryFromListBtn').onclick = () => { openNewDiary(currentDiaryPetFilter); };
     document.getElementById('backFromDiaryCreate').onclick = () => { if(currentDiaryPetFilter) { document.querySelectorAll('.page').forEach(p=>p.style.display='none'); renderDiaryList(currentDiaryPetFilter); document.getElementById('diaryListPage').style.display='block'; document.getElementById('bottomNav').style.display='none'; } else showHome(); };
@@ -903,7 +970,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('diaryMediaInput').addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
         files.forEach(file => {
-            if (tempImagesBase64.length >= 6) { alert('最多上传6张图片'); return; }
+            if (tempImagesBase64.length >= 6) { showToast('最多上传6张图片'); return; }
             const reader = new FileReader();
             reader.onload = ev => { tempImagesBase64.push(ev.target.result); renderImagePreview(); };
             reader.readAsDataURL(file);
@@ -952,10 +1019,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 体重记录入口
     const weightEntry = document.getElementById('weightEntryBtn');
     if (weightEntry) {
-        weightEntry.onclick = () => { if (currentPetId) openWeightPage(currentPetId); else alert('请先选择小熊'); };
+        weightEntry.onclick = () => { if (currentPetId) openWeightPage(currentPetId); else showToast('请先选择小熊'); };
     }
     document.getElementById('backFromWeightPage').onclick = () => { if (currentWeightPetId) showPetDetail(currentWeightPetId); else showHome(); };
-    document.getElementById('saveWeightBtn').onclick = () => { if (currentWeightPetId) addWeightRecordHandler(currentWeightPetId); else alert('请先选择小熊'); };
+    document.getElementById('saveWeightBtn').onclick = () => { if (currentWeightPetId) addWeightRecordHandler(currentWeightPetId); else showToast('请先选择小熊'); };
     
     // 提醒模态框
     const modal = document.getElementById('todoModal');
@@ -965,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeModalFunc() { modal.classList.add('hidden'); editingTodoId=null; document.getElementById('todoNameInput').value=''; document.getElementById('cycleTypeSelect').value='daily'; document.getElementById('modalTitle').innerText='新建提醒'; }
     openAddModal.addEventListener('click', () => { editingTodoId=null; document.getElementById('modalTitle').innerText='新建提醒'; document.getElementById('todoNameInput').value=''; document.getElementById('cycleTypeSelect').value='daily'; modal.classList.remove('hidden'); });
     closeModalBtn.addEventListener('click', closeModalFunc);
-    confirmTodoBtn.addEventListener('click', () => { const name=document.getElementById('todoNameInput').value; const cycle=document.getElementById('cycleTypeSelect').value; if(!name.trim()){ alert('请填写提醒名称'); return; } addOrUpdateTodo(name,cycle); closeModalFunc(); renderTodoList(); });
+    confirmTodoBtn.addEventListener('click', () => { const name=document.getElementById('todoNameInput').value; const cycle=document.getElementById('cycleTypeSelect').value; if(!name.trim()){ showToast('请填写提醒名称'); return; } addOrUpdateTodo(name,cycle); closeModalFunc(); renderTodoList(); });
     modal.addEventListener('click', (e) => { if(e.target===modal) closeModalFunc(); });
     
     // 初始化数据
@@ -1123,7 +1190,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('clearCacheBtn').addEventListener('click', () => {
         if (confirm('确定清除缓存？这不会删除您的数据。')) {
-            alert('缓存已清除');
+            showToast('缓存已清除');
         }
     });
 
@@ -1145,7 +1212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('confirmDelete').addEventListener('click', () => {
         if (deleteType === 'data' || deleteType === 'account') {
             localStorage.clear();
-            alert(deleteType === 'account' ? '账户已注销' : '数据已删除');
+            showToast(deleteType === 'account' ? '账户已注销' : '数据已删除');
             location.reload();
         }
     });
@@ -1237,7 +1304,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('feedbackImageInput').addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
         files.forEach(file => {
-            if (feedbackImages.length >= 3) { alert('最多上传3张截图'); return; }
+            if (feedbackImages.length >= 3) { showToast('最多上传3张截图'); return; }
             const reader = new FileReader();
             reader.onload = ev => {
                 feedbackImages.push(ev.target.result);
@@ -1251,21 +1318,36 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('submitFeedbackBtn').addEventListener('click', () => {
         const description = document.getElementById('feedbackDescription').value.trim();
         if (!description) {
-            alert('请描述您的问题或建议');
+            showToast('请描述您的问题或建议');
             return;
         }
+        if (description.length < 10) {
+            showToast('描述内容至少10个字符');
+            return;
+        }
+
+        const contact = document.getElementById('feedbackContact').value.trim();
+        if (contact) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^1[3-9]\d{9}$/;
+            if (!emailRegex.test(contact) && !phoneRegex.test(contact)) {
+                showToast('请输入有效的邮箱或手机号');
+                return;
+            }
+        }
+
         const feedback = {
             id: Date.now(),
             category: currentFeedbackCategory,
             description: description,
             images: [...feedbackImages],
-            contact: document.getElementById('feedbackContact').value.trim(),
+            contact: contact,
             status: 'pending',
             submitTime: new Date().toISOString()
         };
         feedbackList.unshift(feedback);
         saveFeedbackList();
-        alert('感谢您的反馈！我们会认真处理。');
+        showToast('感谢您的反馈！');
         document.getElementById('feedbackDescription').value = '';
         document.getElementById('feedbackContact').value = '';
         feedbackImages = [];
@@ -1277,11 +1359,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('backFromInvite').addEventListener('click', showProfile);
 
     document.getElementById('shareToWechat').addEventListener('click', () => {
-        alert('正在调用微信分享...（需要微信SDK支持）');
+        showToast('需要微信SDK支持');
     });
 
     document.getElementById('shareToMoments').addEventListener('click', () => {
-        alert('正在调用朋友圈分享...（需要微信SDK支持）');
+        showToast('需要微信SDK支持');
     });
 
     document.getElementById('saveImage').addEventListener('click', saveInviteCard);
@@ -1289,9 +1371,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('copyLink').addEventListener('click', () => {
         const link = `https://rongxiong.example.com/invite?code=${generateInviteCode()}`;
         navigator.clipboard.writeText(link).then(() => {
-            alert('链接已复制到剪贴板');
+            showToast('链接已复制');
         }).catch(() => {
-            alert('复制失败，请手动复制：' + link);
+            showToast('复制失败');
         });
     });
 });
