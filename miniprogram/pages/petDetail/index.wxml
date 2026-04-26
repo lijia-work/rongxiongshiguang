@@ -1,0 +1,53 @@
+<!--pages/petDetail/index.wxml-->
+<view class="container">
+  <!-- 头像 -->
+  <view class="avatar-section">
+    <view class="avatar-large">{{pet.avatar || '🐹'}}</view>
+  </view>
+
+  <!-- 信息列表 -->
+  <view class="info-row">
+    <text class="info-label">昵称</text>
+    <text class="info-value">{{pet.name}}</text>
+  </view>
+  <view class="info-row">
+    <text class="info-label">性别</text>
+    <text class="info-value">{{pet.gender}}</text>
+  </view>
+  <view class="info-row">
+    <text class="info-label">品种</text>
+    <text class="info-value">{{pet.breed || '金丝熊'}}</text>
+  </view>
+  <view class="info-row">
+    <text class="info-label">出生日期</text>
+    <text class="info-value">{{pet.birthDate || '未填写'}}</text>
+  </view>
+  <view class="info-row">
+    <text class="info-label">死亡日期</text>
+    <text class="info-value">{{pet.deathDate || '至今'}}</text>
+  </view>
+  <view class="info-row">
+    <text class="info-label">🏠 到家日期</text>
+    <text class="info-value">{{pet.homeDate || '未设置'}}</text>
+  </view>
+  <view class="info-row">
+    <text class="info-label">🎂 陪伴天数</text>
+    <text class="info-value">已陪伴 {{days}} 天</text>
+  </view>
+
+  <!-- 功能入口 -->
+  <view class="module-entry" bindtap="goToWeight">
+    <text>📊 体重记录</text>
+    <text class="arrow">›</text>
+  </view>
+  <view class="module-entry" bindtap="goToDiary">
+    <text>📔 专属日记</text>
+    <text class="arrow">›</text>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <view class="btn-secondary" bindtap="editPet">✏️ 编辑档案</view>
+    <view class="btn-secondary" bindtap="createAnother">➕ 新建小熊</view>
+  </view>
+</view>

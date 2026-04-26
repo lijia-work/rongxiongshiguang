@@ -1,0 +1,49 @@
+<!--pages/notification/index.wxml-->
+<view class="container">
+  <view class="settings-item" bindtap="toggleReminder">
+    <view class="item-left">
+      <text class="item-icon">🔔</text>
+      <text class="item-text">提醒通知</text>
+    </view>
+    <view class="toggle-switch {{reminderEnabled ? 'active' : ''}}" bindtap="toggleReminder">
+      <view class="toggle-slider"></view>
+    </view>
+  </view>
+
+  <view class="settings-item" bindtap="toggleSound">
+    <view class="item-left">
+      <text class="item-icon">🔊</text>
+      <text class="item-text">提示音</text>
+    </view>
+    <view class="toggle-switch {{soundEnabled ? 'active' : ''}}" bindtap="toggleSound">
+      <view class="toggle-slider"></view>
+    </view>
+  </view>
+
+  <view class="settings-item" bindtap="toggleVibrate">
+    <view class="item-left">
+      <text class="item-icon">📳</text>
+      <text class="item-text">震动提醒</text>
+    </view>
+    <view class="toggle-switch {{vibrateEnabled ? 'active' : ''}}" bindtap="toggleVibrate">
+      <view class="toggle-slider"></view>
+    </view>
+  </view>
+
+  <view class="settings-section-title">提醒时间设置</view>
+
+  <view class="settings-item" bindtap="setReminderTime">
+    <view class="item-left">
+      <text class="item-icon">⏰</text>
+      <text class="item-text">默认提醒时间</text>
+    </view>
+    <view class="item-right">
+      <text class="item-value">{{reminderTime}}</text>
+      <text class="arrow">›</text>
+    </view>
+  </view>
+
+  <view class="tips">
+    <text class="tips-text">💡 开启通知后，系统会在设定时间提醒您照顾小熊</text>
+  </view>
+</view>

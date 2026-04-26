@@ -1,0 +1,40 @@
+<!--pages/profile/index.wxml-->
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="user-info" bindtap="editProfile">
+    <view class="user-avatar">
+      <image wx:if="{{userInfo.avatarType === 'image'}}" src="{{userInfo.avatar}}" mode="aspectFill" class="avatar-img"></image>
+      <text wx:else>{{userInfo.avatar}}</text>
+    </view>
+    <view class="user-info-text">
+      <view class="user-name">{{userInfo.nickname}}</view>
+    </view>
+    <view class="edit-btn">编辑</view>
+  </view>
+
+  <!-- 设置列表 -->
+  <view class="settings-item" bindtap="goToNotification">
+    <text>🔔 消息提醒</text>
+    <text class="settings-value">{{notificationStatus}} ›</text>
+  </view>
+
+  <view class="settings-item" bindtap="goToPrivacy">
+    <text>🔒 隐私设置</text>
+    <text class="settings-value">›</text>
+  </view>
+
+  <view class="settings-item" bindtap="goToAbout">
+    <text>📖 关于我们</text>
+    <text class="settings-value">›</text>
+  </view>
+
+  <view class="settings-item" bindtap="goToFeedback">
+    <text>💬 意见反馈</text>
+    <text class="settings-value">›</text>
+  </view>
+
+  <view class="settings-item" bindtap="goToInvite">
+    <text>📤 邀熊同玩</text>
+    <text class="settings-value">›</text>
+  </view>
+</view>

@@ -1,0 +1,45 @@
+<!--pages/todo/index.wxml-->
+<view class="container">
+  <!-- 添加提醒 -->
+  <view class="add-section">
+    <view class="form-group">
+      <text class="form-label">提醒内容</text>
+      <input class="input-field" placeholder="例如：喂食、换水" value="{{todoContent}}" bindinput="onContentInput" maxlength="20" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">周期类型</text>
+      <picker mode="selector" range="{{cycleOptions}}" range-key="label" value="{{cycleIndex}}" bindchange="onCycleChange">
+        <view class="picker-field">{{cycleOptions[cycleIndex].label}}</view>
+      </picker>
+    </view>
+    <view class="form-group">
+      <text class="form-label">开始日期</text>
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+        <view class="picker-field">{{startDate || '请选择'}}</view>
+      </picker>
+    </view>
+    <button class="btn-add" bindtap="addTodo">➕ 添加提醒</button>
+  </view>
+
+  <!-- 提醒列表 -->
+  <view class="todo-section">
+    <view class="section-title">📋 提醒列表</view>
+    <view wx:if="{{todoList.length === 0}}" class="empty-state">
+      <text>📭 暂无提醒事项</text>
+      <text class="empty-tip">添加提醒后，系统会按时提醒您</text>
+    </view>
+    <view wx:for="{{todoList}}" wx:key="id" class="todo-item">
+      <view class="todo-left">
+        <view class="todo-icon">{{item.icon}}</view>
+        <view class="todo-info">
+          <text class="todo-content">{{item.content}}</text>
+          <text class="todo-cycle">{{item.cycleLabel}}</text>
+        </view>
+      </view>
+      <view class="todo-right">
+        <text class="todo-next">{{item.nextDate}}</text>
+        <text class="todo-delete" bindtap="deleteTodo" data-id="{{item.id}}">🗑️</text>
+      </view>
+    </view>
+  </view>
+</view>

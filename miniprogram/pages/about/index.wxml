@@ -1,0 +1,37 @@
+<!--pages/about/index.wxml-->
+<view class="container">
+  <!-- Logo -->
+  <view class="logo-section">
+    <view class="logo">🐹</view>
+    <view class="app-name">绒熊时光</view>
+    <view class="slogan">记录每一刻陪伴的温暖</view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="info-card">
+    <view class="info-row">
+      <text class="info-label">当前版本</text>
+      <text class="info-value">v1.0.0</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">更新日期</text>
+      <text class="info-value">2026-04-26</text>
+    </view>
+  </view>
+
+  <!-- 更新日志 -->
+  <view class="section-title">更新日志</view>
+  <view class="update-card">
+    <view class="update-item">
+      <view class="update-version">v1.0.0</view>
+      <view class="update-date">2026-04-26</view>
+      <view class="update-content">• 首次发布</view>
+    </view>
+  </view>
+
+  <!-- 版权信息 -->
+  <view class="copyright">
+    <text>© 2026 绒熊时光团队</text>
+    <text>用心呵护每一只小熊</text>
+  </view>
+</view>

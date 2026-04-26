@@ -1,0 +1,78 @@
+<!--pages/home/index.wxml-->
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜索宠物名字"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+      />
+      <text class="clear-btn" wx:if="{{searchKeyword}}" bindtap="clearSearch">✕</text>
+    </view>
+  </view>
+
+  <!-- 提醒栏 -->
+  <view class="reminder-bar" bindtap="goToTodo">
+    <view class="reminder-left">
+      <text class="reminder-bell">⏰</text>
+      <text class="reminder-text">{{reminderText}}</text>
+    </view>
+    <view class="reminder-badge">{{reminderBadge}}</view>
+  </view>
+
+  <!-- 宠物列表标题 -->
+  <view class="section-header">
+    <text class="section-title">🐻 我的小熊</text>
+    <text class="add-btn" bindtap="goToCreatePet">+ 新建</text>
+  </view>
+
+  <!-- 宠物列表 -->
+  <view class="pet-list" wx:if="{{filteredPets.length > 0}}">
+    <view
+      class="pet-card"
+      wx:for="{{filteredPets}}"
+      wx:key="id"
+      bindtap="goToPetDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="pet-avatar">{{item.avatar || '🐹'}}</view>
+      <view class="pet-info">
+        <view class="pet-name">{{item.name}} · {{item.gender === '♂ 公' ? '♂' : '♀'}}</view>
+        <view class="pet-days">🎂 已陪伴 {{item.days}} 天</view>
+      </view>
+      <text class="arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{filteredPets.length === 0}}">
+    <text>🐾 没有找到叫这个名字的小熊，试试其他名字吧～</text>
+  </view>
+</view>
+
+<!-- 悬浮添加按钮 -->
+<view class="float-add-btn" bindtap="showActionMenu">
+  <text>+</text>
+</view>
+
+<!-- 操作菜单弹窗 -->
+<view class="action-mask" wx:if="{{showActionMenu}}" bindtap="hideActionMenu">
+  <view class="action-menu" catchtap="stopPropagation">
+    <view class="menu-item" bindtap="goToCreatePet">
+      <text class="menu-icon">➕</text>
+      <text>创建宠物</text>
+    </view>
+    <view class="menu-item" bindtap="goToDiaryCreate">
+      <text class="menu-icon">📝</text>
+      <text>写日记</text>
+    </view>
+    <view class="menu-item" bindtap="goToTodo">
+      <text class="menu-icon">⏲️</text>
+      <text>待办提醒</text>
+    </view>
+    <view class="menu-close" bindtap="hideActionMenu">点击空白关闭</view>
+  </view>
+</view>

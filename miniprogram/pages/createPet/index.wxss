@@ -1,0 +1,109 @@
+/* pages/createPet/index.wxss */
+
+.container {
+  padding: 16px;
+  padding-bottom: 100px;
+}
+
+/* 头像选择 */
+.avatar-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.avatar-option {
+  width: 56px;
+  height: 56px;
+  background: #F7E5D3;
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  border: 2px solid transparent;
+}
+
+.avatar-option.selected {
+  border-color: #D9A13B;
+  background: #FFF0E0;
+}
+
+.upload-btn {
+  background: #FEF3E4;
+  color: #B45F2B;
+  border-radius: 40px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #F2E8DF;
+  margin-bottom: 12px;
+}
+
+.preview-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  margin-top: 8px;
+}
+
+/* 表单组 */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+  color: #3E2C1F;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 24px;
+  border: 1px solid #E8DDD2;
+  background: white;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.picker-field {
+  padding: 12px 16px;
+  border-radius: 24px;
+  border: 1px solid #E8DDD2;
+  background: white;
+  font-size: 14px;
+  color: #3E2C1F;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-primary {
+  background: #D9A13B;
+  color: white;
+  border-radius: 40px;
+  padding: 14px 24px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.btn-secondary {
+  background: #FEF3E4;
+  color: #B45F2B;
+  border-radius: 40px;
+  padding: 14px 24px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+  border: 1px solid #F2E8DF;
+}

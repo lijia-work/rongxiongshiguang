@@ -1,0 +1,68 @@
+<!--pages/createPet/index.wxml-->
+<view class="container">
+  <!-- 头像选择 -->
+  <view class="form-group">
+    <text class="form-label">头像</text>
+    <view class="avatar-selector">
+      <view
+        class="avatar-option {{selectedAvatar === item ? 'selected' : ''}}"
+        wx:for="{{avatarOptions}}"
+        wx:key="*this"
+        bindtap="selectAvatar"
+        data-emoji="{{item}}"
+      >{{item}}</view>
+    </view>
+    <button class="upload-btn" bindtap="chooseImage">📸 拍照/相册上传</button>
+    <image wx:if="{{customAvatar}}" src="{{customAvatar}}" class="preview-img" mode="aspectFill"></image>
+  </view>
+
+  <!-- 昵称 -->
+  <view class="form-group">
+    <text class="form-label">昵称 *</text>
+    <input class="input-field" placeholder="例如：团团" value="{{name}}" bindinput="onNameInput" maxlength="12" />
+  </view>
+
+  <!-- 性别 -->
+  <view class="form-group">
+    <text class="form-label">性别</text>
+    <picker mode="selector" range="{{genderOptions}}" value="{{genderIndex}}" bindchange="onGenderChange">
+      <view class="picker-field">{{genderOptions[genderIndex]}}</view>
+    </picker>
+  </view>
+
+  <!-- 品种 -->
+  <view class="form-group">
+    <text class="form-label">品种</text>
+    <input class="input-field" placeholder="金丝熊 / 长毛熊" value="{{breed}}" bindinput="onBreedInput" />
+  </view>
+
+  <!-- 出生日期 -->
+  <view class="form-group">
+    <text class="form-label">出生日期</text>
+    <picker mode="date" value="{{birthDate}}" bindchange="onBirthDateChange">
+      <view class="picker-field">{{birthDate || '请选择'}}</view>
+    </picker>
+  </view>
+
+  <!-- 死亡日期 -->
+  <view class="form-group">
+    <text class="form-label">死亡日期 (未去世留空)</text>
+    <picker mode="date" value="{{deathDate}}" bindchange="onDeathDateChange">
+      <view class="picker-field">{{deathDate || '请选择'}}</view>
+    </picker>
+  </view>
+
+  <!-- 到家日期 -->
+  <view class="form-group">
+    <text class="form-label">到家日期 *</text>
+    <picker mode="date" value="{{homeDate}}" bindchange="onHomeDateChange">
+      <view class="picker-field">{{homeDate || '请选择'}}</view>
+    </picker>
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="action-buttons">
+    <button class="btn-primary" bindtap="savePet">💾 保存档案</button>
+    <button class="btn-secondary" bindtap="cancel">取消</button>
+  </view>
+</view>

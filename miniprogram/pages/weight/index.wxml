@@ -1,0 +1,45 @@
+<!--pages/weight/index.wxml-->
+<view class="container">
+  <!-- 宠物信息 -->
+  <view class="pet-header">
+    <view class="pet-avatar">{{pet.avatar || '🐹'}}</view>
+    <view class="pet-info">
+      <text class="pet-name">{{pet.name}}</text>
+      <text class="pet-weight">当前体重: {{currentWeight}}g</text>
+    </view>
+  </view>
+
+  <!-- 添加体重 -->
+  <view class="add-section">
+    <view class="form-row">
+      <view class="form-group">
+        <text class="form-label">日期</text>
+        <picker mode="date" value="{{recordDate}}" bindchange="onDateChange">
+          <view class="picker-field">{{recordDate}}</view>
+        </picker>
+      </view>
+      <view class="form-group">
+        <text class="form-label">体重(g)</text>
+        <input class="input-field" type="digit" placeholder="0" value="{{weight}}" bindinput="onWeightInput" />
+      </view>
+    </view>
+    <button class="btn-add" bindtap="addWeight">➕ 添加记录</button>
+  </view>
+
+  <!-- 体重列表 -->
+  <view class="weight-section">
+    <view class="section-title">📊 记录列表</view>
+    <view wx:if="{{weightList.length === 0}}" class="empty-state">
+      <text>📭 暂无体重记录</text>
+    </view>
+    <view wx:for="{{weightList}}" wx:key="id" class="weight-item">
+      <view class="weight-left">
+        <text class="weight-date">{{item.date}}</text>
+      </view>
+      <view class="weight-right">
+        <text class="weight-value">{{item.weight}}g</text>
+        <text class="weight-delete" bindtap="deleteWeight" data-id="{{item.id}}">🗑️</text>
+      </view>
+    </view>
+  </view>
+</view>

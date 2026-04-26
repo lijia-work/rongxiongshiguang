@@ -1,0 +1,28 @@
+<!--pages/diaryList/index.wxml-->
+<view class="container">
+  <!-- 宠物信息 -->
+  <view class="pet-header">
+    <view class="pet-avatar">{{pet.avatar || '🐹'}}</view>
+    <view class="pet-name">{{pet.name}}的日记</view>
+  </view>
+
+  <!-- 日记列表 -->
+  <view wx:if="{{diaryList.length === 0}}" class="empty-state">
+    <text>📔 暂无日记记录</text>
+    <text class="empty-tip">点击下方按钮开始记录</text>
+  </view>
+
+  <view wx:for="{{diaryList}}" wx:key="id" class="diary-card" bindtap="viewDiary" data-id="{{item.id}}">
+    <view class="diary-header">
+      <text class="diary-date">{{item.date}}</text>
+      <text class="diary-mood">{{item.mood}}</text>
+    </view>
+    <view class="diary-content">{{item.content}}</view>
+    <view wx:if="{{item.images && item.images.length > 0}}" class="diary-images">
+      <image wx:for="{{item.images}}" wx:for-item="img" wx:key="*this" src="{{img}}" class="diary-img" mode="aspectFill" />
+    </view>
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="float-add-btn" bindtap="createDiary">➕</view>
+</view>

@@ -1,0 +1,42 @@
+<!--pages/invite/index.wxml-->
+<view class="container">
+  <!-- 邀请卡片 -->
+  <view class="invite-card">
+    <view class="invite-header">
+      <view class="logo">🐹</view>
+      <view class="app-name">绒熊时光</view>
+    </view>
+    <view class="invite-content">
+      <text class="invite-text">我的小熊在绒熊时光等我来照顾，</text>
+      <text class="invite-text">快来一起养熊吧！</text>
+    </view>
+    <view class="qrcode-placeholder">
+      <view class="qrcode-box">
+        <text class="qrcode-icon">📱</text>
+        <text class="qrcode-text">小程序码</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分享按钮 -->
+  <button class="btn-share" open-type="share">
+    📤 分享给好友
+  </button>
+
+  <!-- 说明 -->
+  <view class="tips-section">
+    <view class="tips-title">如何邀请好友？</view>
+    <view class="tips-item">
+      <text class="tips-num">1</text>
+      <text class="tips-desc">点击"分享给好友"按钮</text>
+    </view>
+    <view class="tips-item">
+      <text class="tips-num">2</text>
+      <text class="tips-desc">选择微信好友或群聊</text>
+    </view>
+    <view class="tips-item">
+      <text class="tips-num">3</text>
+      <text class="tips-desc">好友点击即可加入绒熊时光</text>
+    </view>
+  </view>
+</view>

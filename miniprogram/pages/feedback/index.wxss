@@ -1,0 +1,128 @@
+/* pages/feedback/index.wxss */
+
+.container {
+  padding: 16px;
+  padding-bottom: 100px;
+}
+
+.form-card {
+  background: white;
+  border-radius: 24px;
+  padding: 16px;
+  border: 1px solid #F2E8DF;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+  color: #3E2C1F;
+}
+
+.picker-field {
+  padding: 12px 16px;
+  border-radius: 24px;
+  border: 1px solid #E8DDD2;
+  background: white;
+  font-size: 14px;
+}
+
+.textarea-field {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px 16px;
+  border-radius: 24px;
+  border: 1px solid #E8DDD2;
+  background: white;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 12px;
+  color: #B3A28E;
+  margin-top: 4px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 24px;
+  border: 1px solid #E8DDD2;
+  background: white;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* 图片列表 */
+.image-list {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.image-item {
+  position: relative;
+}
+
+.preview-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+}
+
+.remove-img {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  background: #C23D3D;
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.add-image {
+  width: 80px;
+  height: 80px;
+  background: #FEF3E4;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #D9A13B;
+  border: 1px dashed #D9A13B;
+}
+
+.btn-submit {
+  background: #D9A13B;
+  color: white;
+  border-radius: 40px;
+  padding: 14px 24px;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.tips {
+  margin-top: 20px;
+  padding: 16px;
+  background: #FEF3E4;
+  border-radius: 16px;
+}
+
+.tips-text {
+  font-size: 13px;
+  color: #B45F2B;
+  line-height: 1.6;
+}

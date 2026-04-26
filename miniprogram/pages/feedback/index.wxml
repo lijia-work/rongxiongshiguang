@@ -1,0 +1,47 @@
+<!--pages/feedback/index.wxml-->
+<view class="container">
+  <view class="form-card">
+    <view class="form-group">
+      <text class="form-label">反馈类型</text>
+      <picker mode="selector" range="{{typeOptions}}" value="{{typeIndex}}" bindchange="onTypeChange">
+        <view class="picker-field">{{typeOptions[typeIndex]}}</view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">问题描述 *</text>
+      <textarea
+        class="textarea-field"
+        placeholder="请详细描述您遇到的问题或建议..."
+        value="{{content}}"
+        bindinput="onContentInput"
+        maxlength="500"
+      />
+      <text class="char-count">{{content.length}}/500</text>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">联系方式 (选填)</text>
+      <input class="input-field" placeholder="邮箱或手机号" value="{{contact}}" bindinput="onContactInput" />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">上传截图 (选填)</text>
+      <view class="image-list">
+        <view wx:for="{{images}}" wx:key="*this" class="image-item">
+          <image src="{{item}}" class="preview-img" mode="aspectFill" />
+          <view class="remove-img" bindtap="removeImage" data-index="{{index}}">×</view>
+        </view>
+        <view wx:if="{{images.length < 3}}" class="add-image" bindtap="chooseImage">
+          <text>➕</text>
+        </view>
+      </view>
+    </view>
+
+    <button class="btn-submit" bindtap="submitFeedback">提交反馈</button>
+  </view>
+
+  <view class="tips">
+    <text class="tips-text">💡 感谢您的反馈！我们会认真对待每一条建议，持续改进产品体验。</text>
+  </view>
+</view>

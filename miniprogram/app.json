@@ -1,0 +1,42 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/profile/index",
+    "pages/petDetail/index",
+    "pages/createPet/index",
+    "pages/todo/index",
+    "pages/diaryList/index",
+    "pages/diaryCreate/index",
+    "pages/weight/index",
+    "pages/notification/index",
+    "pages/privacy/index",
+    "pages/about/index",
+    "pages/feedback/index",
+    "pages/invite/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFFCF8",
+    "navigationBarTitleText": "绒熊时光",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#B3A28E",
+    "selectedColor": "#D9A13B",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

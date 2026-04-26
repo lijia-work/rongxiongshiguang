@@ -1,0 +1,106 @@
+/* pages/diaryList/index.wxss */
+
+.container {
+  padding: 16px;
+  padding-bottom: 100px;
+}
+
+.pet-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.pet-avatar {
+  width: 48px;
+  height: 48px;
+  background: #F7E5D3;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.pet-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #3E2C1F;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #B3A28E;
+}
+
+.empty-tip {
+  font-size: 12px;
+  margin-top: 8px;
+  display: block;
+}
+
+.diary-card {
+  background: white;
+  border-radius: 24px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 1px solid #F2E8DF;
+}
+
+.diary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.diary-date {
+  font-size: 12px;
+  color: #B3A28E;
+}
+
+.diary-mood {
+  font-size: 20px;
+}
+
+.diary-content {
+  font-size: 14px;
+  color: #3E2C1F;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.diary-images {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.diary-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+}
+
+.float-add-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 80px;
+  width: 50px;
+  height: 50px;
+  background: #D9A13B;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(217, 161, 59, 0.3);
+}
