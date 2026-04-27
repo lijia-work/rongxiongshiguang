@@ -20,8 +20,8 @@
   <view class="section-header">
     <text class="section-title">🐻 我的小熊</text>
     <view class="section-actions">
-      <!-- 搜索图标 -->
-      <view class="search-icon-btn" bindtap="toggleSearch">
+      <!-- 搜索图标（展开时隐藏） -->
+      <view class="search-icon-btn {{showSearchBar ? 'hidden' : ''}}" bindtap="toggleSearch">
         <text class="search-icon-text">🔍</text>
       </view>
       <!-- 展开的搜索框 -->
@@ -43,19 +43,28 @@
 
   <!-- 宠物列表 -->
   <view class="pet-list" wx:if="{{filteredPets.length > 0}}">
-    <view
-      class="pet-card"
-      wx:for="{{filteredPets}}"
-      wx:key="id"
-      bindtap="goToPetDetail"
-      data-id="{{item.id}}"
-    >
-      <view class="pet-avatar">{{item.avatar || '🐹'}}</view>
-      <view class="pet-info">
-        <view class="pet-name">{{item.name}} · {{item.gender === '♂ 公' ? '♂' : '♀'}}</view>
-        <view class="pet-days">🎂 已陪伴 {{item.days}} 天</view>
+    <view class="pet-card-wrapper" wx:for="{{filteredPets}}" wx:key="id">
+      <!-- 操作按钮（右滑显示） -->
+      <view class="pet-card-actions">
+        <view class="action-btn edit-btn" catchtap="editPet" data-id="{{item.id}}">编辑</view>
+        <view class="action-btn delete-btn" catchtap="deletePet" data-id="{{item.id}}">删除</view>
       </view>
-      <text class="arrow">›</text>
+      <!-- 卡片内容 -->
+      <view
+        class="pet-card {{swipePetId === item.id ? 'swiped' : ''}}"
+        bindtap="goToPetDetail"
+        data-id="{{item.id}}"
+        bindtouchstart="onTouchStart"
+        bindtouchmove="onTouchMove"
+        bindtouchend="onTouchEnd"
+      >
+        <view class="pet-avatar">{{item.avatar || '🐹'}}</view>
+        <view class="pet-info">
+          <view class="pet-name">{{item.name}} · {{item.gender === '♂ 公' ? '♂' : '♀'}}</view>
+          <view class="pet-days">🎂 已陪伴 {{item.days}} 天</view>
+        </view>
+        <text class="arrow">›</text>
+      </view>
     </view>
   </view>
 

@@ -11,7 +11,10 @@ Page({
     showActionMenu: false,
     showSearchBar: false,
     statusBarHeight: 0,
-    navBarTop: 0
+    navBarTop: 0,
+    swipePetId: null,
+    touchStartX: 0,
+    touchStartY: 0
   },
 
   onLoad() {
@@ -148,8 +151,77 @@ Page({
     }
   },
 
+  // ========== 右滑操作 ==========
+
+  onTouchStart(e) {
+    this.setData({
+      touchStartX: e.touches[0].clientX,
+      touchStartY: e.touches[0].clientY
+    });
+  },
+
+  onTouchMove(e) {
+    const { touchStartX, touchStartY } = this.data;
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const diffX = touchStartX - currentX;
+    const diffY = Math.abs(touchStartY - currentY);
+
+    // 如果垂直滑动距离大于水平，不处理（允许滚动）
+    if (diffY > Math.abs(diffX)) return;
+
+    // 右滑超过30px显示操作按钮
+    if (diffX > 30) {
+      const petId = e.currentTarget.dataset.id;
+      if (this.data.swipePetId !== petId) {
+        this.setData({ swipePetId: petId });
+      }
+    } else if (diffX < -30) {
+      // 左滑收起
+      this.setData({ swipePetId: null });
+    }
+  },
+
+  onTouchEnd() {
+    // 保持当前状态
+  },
+
+  // 编辑宠物
+  editPet(e) {
+    const id = e.currentTarget.dataset.id;
+    this.setData({ swipePetId: null });
+    wx.navigateTo({
+      url: `/pages/createPet/index?id=${id}`
+    });
+  },
+
+  // 删除宠物
+  deletePet(e) {
+    const id = e.currentTarget.dataset.id;
+    this.setData({ swipePetId: null });
+
+    wx.showModal({
+      title: '确认删除',
+      content: '确定要删除这只小熊的档案吗？删除后无法恢复。',
+      confirmColor: '#E85A4F',
+      success: (res) => {
+        if (res.confirm) {
+          let pets = wx.getStorageSync('petsData') || [];
+          pets = pets.filter(p => p.id !== id);
+          wx.setStorageSync('petsData', pets);
+          this.loadPets();
+          wx.showToast({ title: '已删除', icon: 'success' });
+        }
+      }
+    });
+  },
+
   // 跳转宠物详情
   goToPetDetail(e) {
+    if (this.data.swipePetId) {
+      this.setData({ swipePetId: null });
+      return;
+    }
     const id = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: `/pages/petDetail/index?id=${id}`

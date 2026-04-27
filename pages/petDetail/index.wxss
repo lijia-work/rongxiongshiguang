@@ -70,3 +70,12 @@
   color: #B45F2B;
   border: 1px solid #F2E8DF;
 }
+
+.delete-archive-btn {
+  margin-top: 24px;
+  padding: 14px;
+  text-align: center;
+  color: #E85A4F;
+  font-size: 14px;
+  font-weight: 500;
+}

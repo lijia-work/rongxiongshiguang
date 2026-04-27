@@ -16,20 +16,6 @@
     </picker>
   </view>
 
-  <!-- 心情选择 -->
-  <view class="form-group">
-    <text class="form-label">心情</text>
-    <view class="mood-selector">
-      <view
-        wx:for="{{moodOptions}}"
-        wx:key="*this"
-        class="mood-option {{selectedMood === item ? 'selected' : ''}}"
-        bindtap="selectMood"
-        data-mood="{{item}}"
-      >{{item}}</view>
-    </view>
-  </view>
-
   <!-- 日记内容 -->
   <view class="form-group">
     <text class="form-label">内容</text>

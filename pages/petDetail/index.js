@@ -55,5 +55,24 @@ Page({
     wx.navigateTo({
       url: '/pages/createPet/index'
     });
+  },
+
+  deletePet() {
+    wx.showModal({
+      title: '确认删除',
+      content: '确定要删除这只小熊的档案吗？删除后无法恢复。',
+      confirmColor: '#E85A4F',
+      success: (res) => {
+        if (res.confirm) {
+          let pets = wx.getStorageSync('petsData') || [];
+          pets = pets.filter(p => p.id !== this.data.petId);
+          wx.setStorageSync('petsData', pets);
+          wx.showToast({ title: '已删除', icon: 'success' });
+          setTimeout(() => {
+            wx.navigateBack();
+          }, 1500);
+        }
+      }
+    });
   }
 });

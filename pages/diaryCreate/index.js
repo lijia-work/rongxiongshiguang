@@ -7,8 +7,6 @@ Page({
     diaryId: null,
     isEdit: false,
     date: '',
-    selectedMood: '😊',
-    moodOptions: ['😊', '😄', '🥰', '😴', '😢', '😤'],
     content: '',
     images: [],
     statusBarHeight: 20
@@ -46,7 +44,6 @@ Page({
         diaryId,
         isEdit: true,
         date: diary.date,
-        selectedMood: diary.mood || '😊',
         content: diary.content,
         images: diary.images || []
       });
@@ -55,10 +52,6 @@ Page({
 
   onDateChange(e) {
     this.setData({ date: e.detail.value });
-  },
-
-  selectMood(e) {
-    this.setData({ selectedMood: e.currentTarget.dataset.mood });
   },
 
   onContentInput(e) {
@@ -87,7 +80,7 @@ Page({
   },
 
   saveDiary() {
-    const { petId, diaryId, date, selectedMood, content, images, isEdit } = this.data;
+    const { petId, diaryId, date, content, images, isEdit } = this.data;
 
     // 验证
     if (!content || content.trim().length < 10) {
@@ -103,7 +96,6 @@ Page({
     const diary = {
       id: isEdit ? diaryId : Date.now(),
       date,
-      mood: selectedMood,
       content: content.trim(),
       images,
       updateTime: Date.now()

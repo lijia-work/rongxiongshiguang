@@ -58,4 +58,7 @@
     <view class="btn-secondary" bindtap="editPet">✏️ 编辑档案</view>
     <view class="btn-secondary" bindtap="createAnother">➕ 新建小熊</view>
   </view>
+
+  <!-- 删除档案按钮 -->
+  <view class="delete-archive-btn" bindtap="deletePet">🗑️ 删除档案</view>
 </view>
