@@ -42,7 +42,7 @@
   background: #FEF8F0;
   padding: 16px;
   border-radius: 28px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .user-avatar {
@@ -74,13 +74,122 @@
   color: #3E2C1F;
 }
 
-.edit-btn {
+.login-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.sync-icon {
+  font-size: 12px;
+}
+
+.sync-text {
+  font-size: 12px;
+  color: #52c41a;
+}
+
+.edit-btn, .login-btn {
   background: #D9A13B;
   color: white;
   padding: 6px 16px;
   border-radius: 20px;
   font-size: 12px;
   flex-shrink: 0;
+}
+
+/* 登录提示卡片 */
+.login-tip-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #FEF3E4 0%, #FFF0E0 100%);
+  padding: 16px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  border: 1px solid #FCE5D2;
+}
+
+.tip-icon {
+  font-size: 32px;
+}
+
+.tip-content {
+  flex: 1;
+}
+
+.tip-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3E2C1F;
+  margin-bottom: 4px;
+}
+
+.tip-desc {
+  font-size: 12px;
+  color: #B3A28E;
+}
+
+.tip-btn {
+  background: #D9A13B;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* 同步卡片 */
+.sync-card {
+  background: white;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #F2E8DF;
+}
+
+.sync-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sync-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3E2C1F;
+}
+
+.sync-time {
+  font-size: 12px;
+  color: #B3A28E;
+}
+
+.sync-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.sync-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background: #FEF3E4;
+  border-radius: 16px;
+}
+
+.sync-btn-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.sync-btn-text {
+  font-size: 12px;
+  color: #B45F2B;
 }
 
 /* 设置项 */
@@ -96,6 +205,130 @@
 }
 
 .settings-value {
+  color: #B3A28E;
+}
+
+/* 退出登录按钮 */
+.logout-btn {
+  margin-top: 24px;
+  text-align: center;
+  padding: 14px;
+  color: #B3A28E;
+  font-size: 14px;
+}
+
+/* ========== 登录弹窗 ========== */
+.login-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.login-modal-content {
+  width: 300px;
+  background: white;
+  border-radius: 24px;
+  padding: 32px 24px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.login-logo {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.login-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #3E2C1F;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.login-desc {
+  font-size: 13px;
+  color: #B3A28E;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.login-wechat-btn, .login-phone-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  box-sizing: border-box;
+}
+
+.login-wechat-btn {
+  background: #07C160;
+  color: white;
+  border: none;
+}
+
+.login-phone-btn {
+  background: #D9A13B;
+  color: white;
+  margin-top: 12px;
+}
+
+.login-btn-icon {
+  font-size: 18px;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: #F2E8DF;
+}
+
+.divider-text {
+  padding: 0 16px;
+  font-size: 12px;
+  color: #B3A28E;
+}
+
+.login-agreement {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 11px;
+  color: #B3A28E;
+}
+
+.agreement-link {
+  color: #D9A13B;
+}
+
+.login-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
   color: #B3A28E;
 }
 
@@ -115,6 +348,8 @@
 
 .avatar-modal-content {
   width: 320px;
+  max-height: 80vh;
+  overflow-y: auto;
   background: white;
   border-radius: 24px;
   padding: 20px;
@@ -127,6 +362,38 @@
   color: #3E2C1F;
   text-align: center;
   margin-bottom: 20px;
+}
+
+.wechat-avatar-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.wechat-avatar-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  border-radius: 16px;
+  border: 2px solid transparent;
+}
+
+.wechat-avatar-option.selected {
+  border-color: #D9A13B;
+  background: #FFF0E0;
+}
+
+.wechat-avatar-preview {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+
+.wechat-avatar-label {
+  font-size: 12px;
+  color: #3E2C1F;
 }
 
 .avatar-grid {
@@ -243,5 +510,15 @@
   color: #B3A28E;
   text-align: center;
   margin-top: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+}
+
+.sync-wechat-btn {
+  text-align: center;
+  padding: 10px;
+  background: #FEF3E4;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #B45F2B;
+  margin-bottom: 16px;
 }

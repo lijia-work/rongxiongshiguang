@@ -12,7 +12,9 @@
     "pages/privacy/index",
     "pages/about/index",
     "pages/feedback/index",
-    "pages/invite/index"
+    "pages/invite/index",
+    "pages/agreement/index",
+    "pages/privacyPolicy/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -37,6 +39,7 @@
       }
     ]
   },
+  "cloud": true,
   "style": "v2",
   "sitemapLocation": "sitemap.json"
 }

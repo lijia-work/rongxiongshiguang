@@ -15,8 +15,42 @@
     </view>
     <view class="user-info-text" bindtap="showNicknameEditor">
       <view class="user-name">{{userInfo.nickname}}</view>
+      <view class="login-status" wx:if="{{isLoggedIn}}">
+        <text class="sync-icon">☁️</text>
+        <text class="sync-text">已同步</text>
+      </view>
     </view>
-    <view class="edit-btn" bindtap="showAvatarPicker">编辑</view>
+    <!-- 登录/编辑按钮 -->
+    <view wx:if="{{!isLoggedIn}}" class="login-btn" bindtap="showLoginModal">登录</view>
+    <view wx:else class="edit-btn" bindtap="showAvatarPicker">编辑</view>
+  </view>
+
+  <!-- 登录提示卡片（未登录时显示） -->
+  <view class="login-tip-card" wx:if="{{!isLoggedIn}}">
+    <view class="tip-icon">🔐</view>
+    <view class="tip-content">
+      <view class="tip-title">登录解锁云端同步</view>
+      <view class="tip-desc">登录后可将数据同步到云端，换手机也不丢失</view>
+    </view>
+    <view class="tip-btn" bindtap="showLoginModal">立即登录</view>
+  </view>
+
+  <!-- 数据同步（已登录时显示） -->
+  <view class="sync-card" wx:if="{{isLoggedIn}}">
+    <view class="sync-header">
+      <text class="sync-title">☁️ 云端同步</text>
+      <text class="sync-time">上次同步：{{lastSyncTime || '刚刚'}}</text>
+    </view>
+    <view class="sync-actions">
+      <view class="sync-btn" bindtap="syncToCloud">
+        <text class="sync-btn-icon">📤</text>
+        <text class="sync-btn-text">上传数据</text>
+      </view>
+      <view class="sync-btn" bindtap="downloadFromCloud">
+        <text class="sync-btn-icon">📥</text>
+        <text class="sync-btn-text">下载数据</text>
+      </view>
+    </view>
   </view>
 
   <!-- 设置列表 -->
@@ -27,6 +61,16 @@
 
   <view class="settings-item" bindtap="goToPrivacy">
     <text>🔒 隐私设置</text>
+    <text class="settings-value">›</text>
+  </view>
+
+  <view class="settings-item" bindtap="goToAgreement">
+    <text>📋 用户协议</text>
+    <text class="settings-value">›</text>
+  </view>
+
+  <view class="settings-item" bindtap="goToPrivacyPolicy">
+    <text>🔐 隐私政策</text>
     <text class="settings-value">›</text>
   </view>
 
@@ -44,12 +88,57 @@
     <text>📤 邀熊同玩</text>
     <text class="settings-value">›</text>
   </view>
+
+  <!-- 退出登录按钮 -->
+  <view class="logout-btn" wx:if="{{isLoggedIn}}" bindtap="handleLogout">退出登录</view>
+</view>
+
+<!-- 登录弹窗 -->
+<view class="login-modal" wx:if="{{showLoginModal}}" bindtap="hideLoginModal">
+  <view class="login-modal-content" catchtap="stopPropagation">
+    <view class="login-logo">🐹</view>
+    <view class="login-title">欢迎使用绒熊时光</view>
+    <view class="login-desc">登录后可同步数据到云端，换手机也不丢失</view>
+
+    <button class="login-wechat-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+      <text class="login-btn-icon">👤</text>
+      <text class="login-btn-text">使用微信头像</text>
+    </button>
+
+    <view class="login-divider">
+      <view class="divider-line"></view>
+      <text class="divider-text">或</text>
+      <view class="divider-line"></view>
+    </view>
+
+    <view class="login-phone-btn" bindtap="handleLogin">
+      <text class="login-btn-icon">🔐</text>
+      <text class="login-btn-text">微信一键登录</text>
+    </view>
+
+    <view class="login-agreement">
+      <text>登录即表示同意</text>
+      <text class="agreement-link" bindtap="goToAgreementFromModal">《用户协议》</text>
+      <text>和</text>
+      <text class="agreement-link" bindtap="goToPrivacyPolicyFromModal">《隐私政策》</text>
+    </view>
+
+    <view class="login-close" bindtap="hideLoginModal">✕</view>
+  </view>
 </view>
 
 <!-- 头像选择弹窗 -->
 <view class="avatar-modal" wx:if="{{showAvatarModal}}" bindtap="hideAvatarModal">
   <view class="avatar-modal-content" catchtap="stopPropagation">
     <view class="modal-title">选择头像</view>
+
+    <!-- 微信头像（已登录时显示） -->
+    <view class="wechat-avatar-section" wx:if="{{isLoggedIn && wechatAvatarUrl}}">
+      <view class="wechat-avatar-option {{selectedWechatAvatar ? 'selected' : ''}}" bindtap="selectWechatAvatar">
+        <image src="{{wechatAvatarUrl}}" class="wechat-avatar-preview" mode="aspectFill"></image>
+        <text class="wechat-avatar-label">微信头像</text>
+      </view>
+    </view>
 
     <!-- 预设头像 -->
     <view class="avatar-grid">
@@ -89,6 +178,12 @@
       focus="{{showNicknameModal}}"
     />
     <view class="nickname-tip">昵称最多12个字符</view>
+
+    <!-- 一键同步微信昵称 -->
+    <view class="sync-wechat-btn" wx:if="{{isLoggedIn}}" bindtap="syncWechatNickname">
+      <text>📝 使用微信昵称</text>
+    </view>
+
     <view class="modal-buttons">
       <view class="modal-btn cancel" bindtap="hideNicknameModal">取消</view>
       <view class="modal-btn confirm" bindtap="confirmNickname">确定</view>

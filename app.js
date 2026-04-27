@@ -1,12 +1,38 @@
 // app.js
 App({
   onLaunch() {
+    // 初始化云开发环境
+    if (wx.cloud) {
+      wx.cloud.init({
+        env: 'cloud1-d3geiy3nw5a3b3a1d',
+        traceUser: true
+      });
+    }
+
     // 初始化本地存储数据
     this.initStorage();
+
+    // 检查登录状态
+    this.checkLoginStatus();
+  },
+
+  // 检查登录状态
+  checkLoginStatus() {
+    const openid = wx.getStorageSync('userOpenid');
+    const loginTime = wx.getStorageSync('loginTime');
+    const now = Date.now();
+
+    // 登录有效期30天
+    if (openid && loginTime && (now - loginTime < 30 * 24 * 60 * 60 * 1000)) {
+      this.globalData.isLoggedIn = true;
+      this.globalData.openid = openid;
+    } else {
+      this.globalData.isLoggedIn = false;
+    }
   },
 
   initStorage() {
-    // 初始化宠物数据
+    // 初始化宠物数据（仅游客模式演示数据）
     if (!wx.getStorageSync('petsData')) {
       wx.setStorageSync('petsData', [
         { id: 1001, name: '团团', gender: '♂ 公', breed: '金丝熊', birthDate: '2023-12-01', deathDate: '', homeDate: '2024-01-15', avatar: '🐹' },
@@ -52,6 +78,8 @@ App({
 
   globalData: {
     userInfo: null,
-    currentPetId: null
+    currentPetId: null,
+    isLoggedIn: false,
+    openid: null
   }
 });

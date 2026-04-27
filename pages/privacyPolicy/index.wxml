@@ -1,0 +1,75 @@
+<!--pages/privacyPolicy/index.wxml-->
+<view class="custom-nav" style="padding-top: {{statusBarHeight}}px;">
+  <view class="nav-content">
+    <view class="nav-back" bindtap="goBack">‹</view>
+    <text class="nav-title">隐私政策</text>
+  </view>
+</view>
+
+<view class="container" style="padding-top: {{statusBarHeight + 44}}px;">
+  <view class="content-card">
+    <view class="title">绒熊时光隐私政策</view>
+    <view class="update-date">更新日期：2026年4月27日</view>
+
+    <view class="section">
+      <view class="section-title">一、信息收集</view>
+      <view class="section-content">我们收集的信息包括：
+1. 用户授权的微信昵称和头像（仅用于展示用户个人资料）
+2. 用户主动输入的宠物档案数据（昵称、品种、日期等）
+3. 用户创建的日记、体重记录、提醒事项等内容
+4. 设备信息（用于适配不同机型）
+
+所有数据均存储在微信云开发服务器，数据安全由微信官方保障。</view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">二、信息使用</view>
+      <view class="section-content">您的数据仅用于：
+1. 在应用内展示和管理您的宠物信息
+2. 提供提醒通知服务
+3. 同步您的数据到云端，方便跨设备使用
+
+我们不会将您的数据用于任何其他目的，也不会与第三方共享。</view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">三、信息存储</view>
+      <view class="section-content">1. 数据存储在微信云开发数据库中，由腾讯云提供安全保障
+2. 数据按用户openid隔离，每个用户只能访问自己的数据
+3. 您可以随时删除您的账号和数据</view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">四、用户权利</view>
+      <view class="section-content">您享有以下权利：
+1. 查看您的所有个人数据
+2. 修改您的昵称、头像等个人资料
+3. 编辑、删除您的宠物档案和日记
+4. 退出登录，停止数据同步
+5. 通过清除小程序数据彻底删除所有信息</view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">五、数据安全</view>
+      <view class="section-content">我们采取以下措施保护您的数据：
+1. 使用微信云开发的安全机制
+2. 数据传输采用加密协议
+3. 定期备份数据防止丢失</view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">六、未成年人保护</view>
+      <view class="section-content">我们重视未成年人的隐私保护。如果您是未成年人，请在监护人指导下使用本服务，并在监护人的同意下进行账号注册和数据录入。</view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">七、政策更新</view>
+      <view class="section-content">如隐私政策有更新，我们将在应用内通知您。继续使用即表示您同意更新后的政策。</view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">八、联系我们</view>
+      <view class="section-content">如有任何隐私相关问题，请通过小程序内的"意见反馈"功能联系我们，我们将在7个工作日内回复。</view>
+    </view>
+  </view>
+</view>
