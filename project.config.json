@@ -1,5 +1,6 @@
 {
   "miniprogramRoot": "./",
+  "cloudfunctionRoot": "cloudfunctions/",
   "projectname": "rongxiongshiguang",
   "description": "绒熊时光 - 宠物饲养记录小程序",
   "appid": "wx3c725441d46d0d31",
@@ -29,9 +30,26 @@
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
-    }
+    },
+    "compileWorklet": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true
   },
   "compileType": "miniprogram",
   "libVersion": "2.25.0",
-  "condition": {}
+  "condition": {},
+  "simulatorPluginLibVersion": {},
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "editorSetting": {}
 }
