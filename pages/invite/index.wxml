@@ -18,10 +18,19 @@
       <text class="invite-text">我的小熊在绒熊时光等我来照顾，</text>
       <text class="invite-text">快来一起养熊吧！</text>
     </view>
+    <!-- 小程序码 -->
     <view class="qrcode-placeholder">
       <view class="qrcode-box">
-        <text class="qrcode-icon">📱</text>
-        <text class="qrcode-text">小程序码</text>
+        <image
+          wx:if="{{qrcodeUrl}}"
+          src="{{qrcodeUrl}}"
+          class="qrcode-img"
+          mode="aspectFit"
+          show-menu-by-longpress="{{true}}"
+        />
+        <view wx:else class="qrcode-loading">
+          <text class="loading-text">加载中...</text>
+        </view>
       </view>
     </view>
   </view>
@@ -31,20 +40,34 @@
     📤 分享给好友
   </button>
 
+  <!-- 保存海报按钮 -->
+  <view class="btn-save-poster" bindtap="savePoster">
+    🖼️ 保存分享海报
+  </view>
+
   <!-- 说明 -->
   <view class="tips-section">
     <view class="tips-title">如何邀请好友？</view>
     <view class="tips-item">
       <text class="tips-num">1</text>
-      <text class="tips-desc">点击"分享给好友"按钮</text>
+      <text class="tips-desc">点击"分享给好友"发送给微信好友或群聊</text>
     </view>
     <view class="tips-item">
       <text class="tips-num">2</text>
-      <text class="tips-desc">选择微信好友或群聊</text>
+      <text class="tips-desc">保存分享海报，可发朋友圈或线下分享</text>
     </view>
     <view class="tips-item">
       <text class="tips-num">3</text>
-      <text class="tips-desc">好友点击即可加入绒熊时光</text>
+      <text class="tips-desc">好友扫码即可加入绒熊时光</text>
     </view>
   </view>
 </view>
+
+<!-- 海报生成Canvas（隐藏） -->
+<canvas
+  type="2d"
+  id="posterCanvas"
+  canvas-id="posterCanvas"
+  class="poster-canvas"
+  style="width: 300px; height: 400px; position: fixed; left: -9999px; top: -9999px;"
+></canvas>
