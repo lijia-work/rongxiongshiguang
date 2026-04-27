@@ -84,6 +84,23 @@
   color: #B3A28E;
 }
 
+.qrcode-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.error-text {
+  font-size: 12px;
+  color: #B3A28E;
+}
+
 .btn-share {
   background: #D9A13B;
   color: white;

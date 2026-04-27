@@ -11,14 +11,16 @@ exports.main = async (event, context) => {
 
   try {
     // 生成小程序码
+    // 注意：page必须是在app.json中注册的页面，且已上传体验版
+    // 如果小程序未上传体验版，会报41030错误
     const res = await cloud.openapi.wxacode.getUnlimited({
       scene: scene || 'invite',
-      page: page || 'pages/home/index',
+      page: 'pages/home/index', // 首页路径
       width: width,
       autoColor: false,
-      lineColor: { r: 217, g: 161, b: 59 }, // 使用主题色 #D9A13B
+      lineColor: { r: 217, g: 161, b: 59 },
       isHyaline: false,
-      envVersion: 'release'
+      envVersion: 'trial'
     });
 
     // 上传到云存储
@@ -33,9 +35,16 @@ exports.main = async (event, context) => {
     };
   } catch (err) {
     console.error('生成小程序码失败:', err);
+
+    // 如果生成失败，返回错误信息
+    // 常见错误41030：页面不存在或未上传体验版
     return {
       success: false,
-      error: err
+      error: {
+        errCode: err.errCode,
+        errMsg: err.errMsg
+      },
+      tip: '请确保已上传小程序体验版'
     };
   }
 };

@@ -4,7 +4,8 @@ const app = getApp();
 Page({
   data: {
     statusBarHeight: 20,
-    qrcodeUrl: ''
+    qrcodeUrl: '',
+    qrcodeLoading: true
   },
 
   onLoad() {
@@ -25,8 +26,12 @@ Page({
     try {
       // 先尝试从缓存获取
       const cachedQrCode = wx.getStorageSync('appQrCodeUrl');
-      if (cachedQrCode) {
-        this.setData({ qrcodeUrl: cachedQrCode });
+      const cacheTime = wx.getStorageSync('appQrCodeTime');
+      const now = Date.now();
+
+      // 缓存有效期7天
+      if (cachedQrCode && cacheTime && (now - cacheTime < 7 * 24 * 60 * 60 * 1000)) {
+        this.setData({ qrcodeUrl: cachedQrCode, qrcodeLoading: false });
         return;
       }
 
@@ -40,26 +45,44 @@ Page({
         }
       });
 
-      if (res.result && res.result.fileID) {
+      console.log('云函数返回:', res);
+
+      if (res.result && res.result.success && res.result.fileID) {
         // 获取临时URL
         const fileRes = await wx.cloud.getTempFileURL({
           fileList: [res.result.fileID]
         });
 
+        console.log('临时URL返回:', fileRes);
+
         if (fileRes.fileList && fileRes.fileList[0] && fileRes.fileList[0].tempFileURL) {
           const qrcodeUrl = fileRes.fileList[0].tempFileURL;
-          this.setData({ qrcodeUrl });
+          this.setData({ qrcodeUrl, qrcodeLoading: false });
           // 缓存小程序码URL
           wx.setStorageSync('appQrCodeUrl', qrcodeUrl);
+          wx.setStorageSync('appQrCodeTime', now);
         }
+      } else {
+        throw new Error('云函数返回结果异常');
       }
     } catch (err) {
       console.error('获取小程序码失败:', err);
-      // 使用备用方案：显示提示
-      this.setData({
-        qrcodeUrl: ''
+      this.setData({ qrcodeLoading: false });
+      // 显示提示，让用户知道可以使用分享功能
+      wx.showToast({
+        title: '小程序码加载失败，可使用分享功能',
+        icon: 'none',
+        duration: 2000
       });
     }
+  },
+
+  // 重新加载小程序码
+  reloadQrCode() {
+    this.setData({ qrcodeLoading: true, qrcodeUrl: '' });
+    wx.removeStorageSync('appQrCodeUrl');
+    wx.removeStorageSync('appQrCodeTime');
+    this.getWxQrCode();
   },
 
   // 保存分享海报

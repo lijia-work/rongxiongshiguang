@@ -28,8 +28,12 @@
           mode="aspectFit"
           show-menu-by-longpress="{{true}}"
         />
-        <view wx:else class="qrcode-loading">
+        <view wx:elif="{{qrcodeLoading}}" class="qrcode-loading">
           <text class="loading-text">加载中...</text>
+        </view>
+        <view wx:else class="qrcode-error" bindtap="reloadQrCode">
+          <text class="error-icon">🔄</text>
+          <text class="error-text">点击重试</text>
         </view>
       </view>
     </view>
