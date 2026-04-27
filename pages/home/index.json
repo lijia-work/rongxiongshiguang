@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "绒熊时光",
+  "navigationStyle": "custom",
   "usingComponents": {}
 }

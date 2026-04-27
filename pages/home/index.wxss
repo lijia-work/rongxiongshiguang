@@ -2,37 +2,37 @@
 
 .container {
   padding: 16px;
-  padding-bottom: 120px;
+  padding-bottom: calc(50px + env(safe-area-inset-bottom) + 20px);
+  box-sizing: border-box;
+  min-height: 100vh;
+  background: #FFFCF8;
 }
 
-/* 搜索栏 */
-.search-bar {
-  margin-bottom: 16px;
+/* 顶部标题 */
+.page-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #FFFCF8;
+  z-index: 100;
+  box-sizing: border-box;
 }
 
-.search-input-wrapper {
+.header-content {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  background: #FEF3E4;
-  border-radius: 30px;
-  padding: 8px 16px;
+  padding-left: 16px;
+  padding-right: 16px;
+  height: 44px;
 }
 
-.search-icon {
-  font-size: 16px;
-  margin-right: 8px;
-}
-
-.search-input {
-  flex: 1;
-  font-size: 14px;
-  background: transparent;
-}
-
-.clear-btn {
-  font-size: 14px;
-  color: #B3A28E;
-  padding: 4px;
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #D9A13B;
+  text-align: left;
 }
 
 /* 提醒栏 */
@@ -85,9 +85,66 @@
   color: #3E2C1F;
 }
 
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 搜索图标按钮 */
+.search-icon-btn {
+  width: 32px;
+  height: 32px;
+  background: #FEF3E4;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.search-icon-text {
+  font-size: 16px;
+}
+
+/* 展开的搜索框 */
+.search-expand-box {
+  width: 0;
+  height: 32px;
+  background: #FEF3E4;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.search-expand-box.expanded {
+  width: 140px;
+  padding: 0 12px;
+  opacity: 1;
+}
+
+.search-expand-input {
+  flex: 1;
+  font-size: 13px;
+  background: transparent;
+  min-width: 0;
+}
+
+.search-expand-close {
+  font-size: 14px;
+  color: #B3A28E;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
 .add-btn {
   font-size: 14px;
   color: #D9A13B;
+  white-space: nowrap;
 }
 
 /* 宠物卡片 */
@@ -141,24 +198,6 @@
   padding: 40px 0;
   color: #B3A28E;
   font-size: 14px;
-}
-
-/* 悬浮按钮 */
-.float-add-btn {
-  position: fixed;
-  right: 20px;
-  bottom: 120px;
-  width: 50px;
-  height: 50px;
-  background: #D9A13B;
-  border-radius: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 28px;
-  font-weight: bold;
-  box-shadow: 0 4px 12px rgba(217, 161, 59, 0.3);
 }
 
 /* 操作菜单 */

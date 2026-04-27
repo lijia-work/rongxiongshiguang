@@ -8,9 +8,12 @@
   height: 50px;
   background: white;
   display: flex;
-  padding-bottom: env(safe-area-inset-bottom);
+  align-items: center;
   border-top: 1px solid #F2E8DF;
   z-index: 999;
+  box-sizing: border-box;
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: constant(safe-area-inset-bottom);
 }
 
 .tab-item {
@@ -20,6 +23,7 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
+  height: 50px;
 }
 
 .tab-icon {
@@ -34,4 +38,32 @@
 .tab-item.active .tab-text {
   color: #D9A13B;
   font-weight: 600;
+}
+
+/* 中间加号按钮 */
+.tab-center-btn {
+  width: 70px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-btn-inner {
+  width: 50px;
+  height: 50px;
+  background: #D9A13B;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(217, 161, 59, 0.3);
+  margin-top: -20px;
+}
+
+.center-btn-icon {
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1;
 }

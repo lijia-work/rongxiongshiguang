@@ -1,5 +1,13 @@
 <!--pages/createPet/index.wxml-->
-<view class="container">
+<!-- 自定义导航栏 -->
+<view class="custom-nav" style="padding-top: {{statusBarHeight}}px;">
+  <view class="nav-content">
+    <view class="nav-back" bindtap="goBack">‹</view>
+    <text class="nav-title">{{isEdit ? '编辑小熊档案' : '创建小熊档案'}}</text>
+  </view>
+</view>
+
+<view class="container" style="padding-top: {{statusBarHeight + 44}}px;">
   <!-- 头像选择 -->
   <view class="form-group">
     <text class="form-label">头像</text>
@@ -19,7 +27,7 @@
   <!-- 昵称 -->
   <view class="form-group">
     <text class="form-label">昵称 *</text>
-    <input class="input-field" placeholder="例如：团团" value="{{name}}" bindinput="onNameInput" maxlength="12" />
+    <input class="input-field" placeholder="例如：团团" placeholder-style="color: #B3A28E;" value="{{name}}" bindinput="onNameInput" maxlength="12" />
   </view>
 
   <!-- 性别 -->
@@ -33,7 +41,7 @@
   <!-- 品种 -->
   <view class="form-group">
     <text class="form-label">品种</text>
-    <input class="input-field" placeholder="金丝熊 / 长毛熊" value="{{breed}}" bindinput="onBreedInput" />
+    <input class="input-field" placeholder="金丝熊 / 长毛熊" placeholder-style="color: #B3A28E;" value="{{breed}}" bindinput="onBreedInput" />
   </view>
 
   <!-- 出生日期 -->

@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "小熊档案",
+  "navigationStyle": "custom",
   "usingComponents": {}
 }

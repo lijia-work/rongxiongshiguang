@@ -8,12 +8,28 @@ Page({
     searchKeyword: '',
     reminderText: '暂无待办提醒',
     reminderBadge: '0',
-    showActionMenu: false
+    showActionMenu: false,
+    showSearchBar: false,
+    statusBarHeight: 0,
+    navBarTop: 0
   },
 
   onLoad() {
+    this.initNavBar();
     this.loadPets();
     this.loadTodoPreview();
+  },
+
+  // 初始化导航栏高度
+  initNavBar() {
+    const systemInfo = wx.getSystemInfoSync();
+    const menuButton = wx.getMenuButtonBoundingClientRect();
+    const statusBarHeight = systemInfo.statusBarHeight || 20;
+    const navBarTop = menuButton.bottom + (menuButton.top - statusBarHeight);
+    this.setData({
+      statusBarHeight,
+      navBarTop
+    });
   },
 
   onShow() {
@@ -23,6 +39,11 @@ Page({
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0 });
     }
+  },
+
+  // 响应TabBar中间加号按钮点击
+  onTabAddTap() {
+    this.showActionMenu();
   },
 
   // 加载宠物列表
@@ -102,6 +123,29 @@ Page({
       searchKeyword: '',
       filteredPets: this.data.pets
     });
+  },
+
+  // 搜索框失去焦点时收起
+  onSearchBlur() {
+    // 如果没有搜索内容，则收起搜索框
+    if (!this.data.searchKeyword) {
+      this.setData({
+        showSearchBar: false
+      });
+    }
+  },
+
+  // 切换搜索框显示
+  toggleSearch() {
+    this.setData({
+      showSearchBar: !this.data.showSearchBar
+    });
+    // 如果收起且没有内容，清空搜索
+    if (!this.data.showSearchBar && !this.data.searchKeyword) {
+      this.setData({
+        filteredPets: this.data.pets
+      });
+    }
   },
 
   // 跳转宠物详情

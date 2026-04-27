@@ -1,5 +1,13 @@
 <!--pages/weight/index.wxml-->
-<view class="container">
+<!-- 自定义导航栏 -->
+<view class="custom-nav" style="padding-top: {{statusBarHeight}}px;">
+  <view class="nav-content">
+    <view class="nav-back" bindtap="goBack">‹</view>
+    <text class="nav-title">体重记录</text>
+  </view>
+</view>
+
+<view class="container" style="padding-top: {{statusBarHeight + 44}}px;">
   <!-- 宠物信息 -->
   <view class="pet-header">
     <view class="pet-avatar">{{pet.avatar || '🐹'}}</view>
@@ -20,7 +28,7 @@
       </view>
       <view class="form-group">
         <text class="form-label">体重(g)</text>
-        <input class="input-field" type="digit" placeholder="0" value="{{weight}}" bindinput="onWeightInput" />
+        <input class="input-field" type="digit" placeholder="0" placeholder-style="color: #B3A28E;" value="{{weight}}" bindinput="onWeightInput" />
       </view>
     </view>
     <button class="btn-add" bindtap="addWeight">➕ 添加记录</button>

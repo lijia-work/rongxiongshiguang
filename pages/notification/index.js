@@ -4,11 +4,20 @@ Page({
     reminderEnabled: true,
     soundEnabled: true,
     vibrateEnabled: false,
-    reminderTime: '09:00'
+    reminderTime: '09:00',
+    statusBarHeight: 20
   },
 
   onLoad() {
+    const systemInfo = wx.getSystemInfoSync();
+    this.setData({
+      statusBarHeight: systemInfo.statusBarHeight || 20
+    });
     this.loadSettings();
+  },
+
+  goBack() {
+    wx.navigateBack();
   },
 
   loadSettings() {

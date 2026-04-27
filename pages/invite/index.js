@@ -1,6 +1,19 @@
 // pages/invite/index.js
 Page({
-  data: {},
+  data: {
+    statusBarHeight: 20
+  },
+
+  onLoad() {
+    const systemInfo = wx.getSystemInfoSync();
+    this.setData({
+      statusBarHeight: systemInfo.statusBarHeight || 20
+    });
+  },
+
+  goBack() {
+    wx.navigateBack();
+  },
 
   onShareAppMessage() {
     return {

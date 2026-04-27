@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "创建小熊档案",
+  "navigationStyle": "custom",
   "usingComponents": {}
 }

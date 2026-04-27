@@ -1,5 +1,13 @@
 <!--pages/privacy/index.wxml-->
-<view class="container">
+<!-- 自定义导航栏 -->
+<view class="custom-nav" style="padding-top: {{statusBarHeight}}px;">
+  <view class="nav-content">
+    <view class="nav-back" bindtap="goBack">‹</view>
+    <text class="nav-title">隐私设置</text>
+  </view>
+</view>
+
+<view class="container" style="padding-top: {{statusBarHeight + 44}}px;">
   <view class="content-card">
     <view class="title">绒熊时光 隐私政策</view>
     <view class="update-date">更新日期：2026年4月26日</view>

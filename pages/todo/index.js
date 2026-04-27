@@ -12,12 +12,21 @@ Page({
       { value: 'custom', label: '自定义', icon: '⚙️' }
     ],
     startDate: '',
-    todoList: []
+    todoList: [],
+    statusBarHeight: 20
   },
 
   onLoad() {
-    this.setData({ startDate: util.getTodayStr() });
+    const systemInfo = wx.getSystemInfoSync();
+    this.setData({
+      statusBarHeight: systemInfo.statusBarHeight || 20,
+      startDate: util.getTodayStr()
+    });
     this.loadTodoList();
+  },
+
+  goBack() {
+    wx.navigateBack();
   },
 
   loadTodoList() {

@@ -1,16 +1,9 @@
 <!--pages/home/index.wxml-->
-<view class="container">
-  <!-- 搜索栏 -->
-  <view class="search-bar">
-    <view class="search-input-wrapper">
-      <text class="search-icon">🔍</text>
-      <input
-        class="search-input"
-        placeholder="搜索宠物名字"
-        value="{{searchKeyword}}"
-        bindinput="onSearchInput"
-      />
-      <text class="clear-btn" wx:if="{{searchKeyword}}" bindtap="clearSearch">✕</text>
+<view class="container" style="padding-top: {{navBarTop + 16}}px;">
+  <!-- 顶部标题 -->
+  <view class="page-header" style="top: 0; height: {{navBarTop}}px;">
+    <view class="header-content" style="padding-top: {{statusBarHeight}}px;">
+      <text class="page-title">绒熊时光</text>
     </view>
   </view>
 
@@ -26,7 +19,26 @@
   <!-- 宠物列表标题 -->
   <view class="section-header">
     <text class="section-title">🐻 我的小熊</text>
-    <text class="add-btn" bindtap="goToCreatePet">+ 新建</text>
+    <view class="section-actions">
+      <!-- 搜索图标 -->
+      <view class="search-icon-btn" bindtap="toggleSearch">
+        <text class="search-icon-text">🔍</text>
+      </view>
+      <!-- 展开的搜索框 -->
+      <view class="search-expand-box {{showSearchBar ? 'expanded' : ''}}">
+        <input
+          class="search-expand-input"
+          placeholder="搜索宠物名字"
+          value="{{searchKeyword}}"
+          bindinput="onSearchInput"
+          bindblur="onSearchBlur"
+          focus="{{showSearchBar}}"
+        />
+        <text class="search-expand-close" wx:if="{{searchKeyword}}" bindtap="clearSearch">✕</text>
+      </view>
+      <!-- 新建按钮 -->
+      <text class="add-btn" bindtap="goToCreatePet">+ 新建</text>
+    </view>
   </view>
 
   <!-- 宠物列表 -->
@@ -51,11 +63,6 @@
   <view class="empty-state" wx:if="{{filteredPets.length === 0}}">
     <text>🐾 没有找到叫这个名字的小熊，试试其他名字吧～</text>
   </view>
-</view>
-
-<!-- 悬浮添加按钮 -->
-<view class="float-add-btn" bindtap="showActionMenu">
-  <text>+</text>
 </view>
 
 <!-- 操作菜单弹窗 -->

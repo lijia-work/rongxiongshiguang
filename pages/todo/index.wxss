@@ -14,41 +14,13 @@
   border: 1px solid #F2E8DF;
 }
 
-.form-group {
-  margin-bottom: 12px;
-}
-
-.form-label {
-  font-weight: 600;
-  margin-bottom: 6px;
-  display: block;
-  color: #3E2C1F;
-}
-
-.input-field {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 20px;
-  border: 1px solid #E8DDD2;
-  background: white;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-
-.picker-field {
-  padding: 10px 14px;
-  border-radius: 20px;
-  border: 1px solid #E8DDD2;
-  background: white;
-  font-size: 14px;
-}
-
 .btn-add {
   background: #D9A13B;
   color: white;
   border-radius: 40px;
-  padding: 12px;
+  padding: 14px;
   font-weight: 600;
+  font-size: 16px;
   margin-top: 8px;
 }
 

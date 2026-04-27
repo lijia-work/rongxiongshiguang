@@ -10,10 +10,16 @@ Page({
     selectedMood: '😊',
     moodOptions: ['😊', '😄', '🥰', '😴', '😢', '😤'],
     content: '',
-    images: []
+    images: [],
+    statusBarHeight: 20
   },
 
   onLoad(options) {
+    const systemInfo = wx.getSystemInfoSync();
+    this.setData({
+      statusBarHeight: systemInfo.statusBarHeight || 20
+    });
+
     const petId = parseInt(options.petId);
     this.setData({
       petId,
@@ -24,6 +30,10 @@ Page({
     if (options.id) {
       this.loadDiary(parseInt(options.id));
     }
+  },
+
+  goBack() {
+    wx.navigateBack();
   },
 
   loadDiary(diaryId) {
@@ -40,7 +50,6 @@ Page({
         content: diary.content,
         images: diary.images || []
       });
-      wx.setNavigationBarTitle({ title: '编辑日记' });
     }
   },
 

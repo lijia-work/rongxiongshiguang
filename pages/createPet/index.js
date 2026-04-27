@@ -19,10 +19,19 @@ Page({
 
     // 编辑模式
     isEdit: false,
-    petId: null
+    petId: null,
+
+    // 导航栏
+    statusBarHeight: 20
   },
 
   onLoad(options) {
+    // 获取状态栏高度
+    const systemInfo = wx.getSystemInfoSync();
+    this.setData({
+      statusBarHeight: systemInfo.statusBarHeight || 20
+    });
+
     // 初始化默认到家日期为今天
     const today = util.getTodayStr();
     this.setData({ homeDate: today });
@@ -32,6 +41,10 @@ Page({
       const petId = parseInt(options.id);
       this.loadPet(petId);
     }
+  },
+
+  goBack() {
+    wx.navigateBack();
   },
 
   loadPet(petId) {
@@ -50,7 +63,6 @@ Page({
         deathDate: pet.deathDate || '',
         homeDate: pet.homeDate || ''
       });
-      wx.setNavigationBarTitle({ title: '编辑小熊档案' });
     }
   },
 

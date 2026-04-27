@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "提醒事项",
+  "navigationStyle": "custom",
   "usingComponents": {}
 }

@@ -1,5 +1,13 @@
 <!--pages/about/index.wxml-->
-<view class="container">
+<!-- 自定义导航栏 -->
+<view class="custom-nav" style="padding-top: {{statusBarHeight}}px;">
+  <view class="nav-content">
+    <view class="nav-back" bindtap="goBack">‹</view>
+    <text class="nav-title">关于我们</text>
+  </view>
+</view>
+
+<view class="container" style="padding-top: {{statusBarHeight + 44}}px;">
   <!-- Logo -->
   <view class="logo-section">
     <view class="logo">🐹</view>

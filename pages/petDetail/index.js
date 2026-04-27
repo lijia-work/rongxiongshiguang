@@ -5,13 +5,23 @@ Page({
   data: {
     pet: {},
     days: 0,
-    petId: null
+    petId: null,
+    statusBarHeight: 20
   },
 
   onLoad(options) {
+    const systemInfo = wx.getSystemInfoSync();
+    this.setData({
+      statusBarHeight: systemInfo.statusBarHeight || 20
+    });
+
     const petId = parseInt(options.id);
     this.setData({ petId });
     this.loadPet(petId);
+  },
+
+  goBack() {
+    wx.navigateBack();
   },
 
   loadPet(petId) {

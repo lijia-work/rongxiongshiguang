@@ -1,10 +1,18 @@
 <!--pages/todo/index.wxml-->
-<view class="container">
+<!-- 自定义导航栏 -->
+<view class="custom-nav" style="padding-top: {{statusBarHeight}}px;">
+  <view class="nav-content">
+    <view class="nav-back" bindtap="goBack">‹</view>
+    <text class="nav-title">提醒事项</text>
+  </view>
+</view>
+
+<view class="container" style="padding-top: {{statusBarHeight + 44}}px;">
   <!-- 添加提醒 -->
   <view class="add-section">
     <view class="form-group">
       <text class="form-label">提醒内容</text>
-      <input class="input-field" placeholder="例如：喂食、换水" value="{{todoContent}}" bindinput="onContentInput" maxlength="20" />
+      <input class="input-field" placeholder="例如：喂食、换水" placeholder-style="color: #B3A28E;" value="{{todoContent}}" bindinput="onContentInput" maxlength="20" />
     </view>
     <view class="form-group">
       <text class="form-label">周期类型</text>

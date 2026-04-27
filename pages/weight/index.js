@@ -8,10 +8,16 @@ Page({
     recordDate: '',
     weight: '',
     weightList: [],
-    currentWeight: '--'
+    currentWeight: '--',
+    statusBarHeight: 20
   },
 
   onLoad(options) {
+    const systemInfo = wx.getSystemInfoSync();
+    this.setData({
+      statusBarHeight: systemInfo.statusBarHeight || 20
+    });
+
     const petId = parseInt(options.id);
     this.setData({
       petId,
@@ -19,6 +25,10 @@ Page({
     });
     this.loadPet(petId);
     this.loadWeights(petId);
+  },
+
+  goBack() {
+    wx.navigateBack();
   },
 
   loadPet(petId) {

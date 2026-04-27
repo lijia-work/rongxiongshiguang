@@ -1,5 +1,13 @@
 <!--pages/diaryCreate/index.wxml-->
-<view class="container">
+<!-- 自定义导航栏 -->
+<view class="custom-nav" style="padding-top: {{statusBarHeight}}px;">
+  <view class="nav-content">
+    <view class="nav-back" bindtap="goBack">‹</view>
+    <text class="nav-title">{{isEdit ? '编辑日记' : '写日记'}}</text>
+  </view>
+</view>
+
+<view class="container" style="padding-top: {{statusBarHeight + 44}}px;">
   <!-- 日期选择 -->
   <view class="form-group">
     <text class="form-label">日期</text>
@@ -28,6 +36,7 @@
     <textarea
       class="textarea-field"
       placeholder="记录今天的故事..."
+      placeholder-style="color: #B3A28E; line-height: 1.6;"
       value="{{content}}"
       bindinput="onContentInput"
       maxlength="500"

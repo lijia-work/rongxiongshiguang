@@ -1,5 +1,13 @@
 <!--pages/feedback/index.wxml-->
-<view class="container">
+<!-- 自定义导航栏 -->
+<view class="custom-nav" style="padding-top: {{statusBarHeight}}px;">
+  <view class="nav-content">
+    <view class="nav-back" bindtap="goBack">‹</view>
+    <text class="nav-title">意见反馈</text>
+  </view>
+</view>
+
+<view class="container" style="padding-top: {{statusBarHeight + 44}}px;">
   <view class="form-card">
     <view class="form-group">
       <text class="form-label">反馈类型</text>
@@ -13,6 +21,7 @@
       <textarea
         class="textarea-field"
         placeholder="请详细描述您遇到的问题或建议..."
+        placeholder-style="color: #B3A28E; line-height: 1.6;"
         value="{{content}}"
         bindinput="onContentInput"
         maxlength="500"
@@ -22,7 +31,7 @@
 
     <view class="form-group">
       <text class="form-label">联系方式 (选填)</text>
-      <input class="input-field" placeholder="邮箱或手机号" value="{{contact}}" bindinput="onContactInput" />
+      <input class="input-field" placeholder="邮箱或手机号" placeholder-style="color: #B3A28E;" value="{{contact}}" bindinput="onContactInput" />
     </view>
 
     <view class="form-group">

@@ -1,19 +1,7 @@
 // custom-tab-bar/index.js
 Component({
   data: {
-    selected: 0,
-    list: [
-      {
-        pagePath: "/pages/home/index",
-        text: "首页",
-        icon: "🏠"
-      },
-      {
-        pagePath: "/pages/profile/index",
-        text: "我的",
-        icon: "👤"
-      }
-    ]
+    selected: 0
   },
 
   methods: {
@@ -24,6 +12,16 @@ Component({
       this.setData({
         selected: data.index
       });
+    },
+
+    // 中间加号按钮点击
+    onAddTap() {
+      // 触发全局事件，让当前页面处理
+      const pages = getCurrentPages();
+      const currentPage = pages[pages.length - 1];
+      if (currentPage && typeof currentPage.onTabAddTap === 'function') {
+        currentPage.onTabAddTap();
+      }
     }
   }
 });

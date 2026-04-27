@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "邀熊同玩",
+  "navigationStyle": "custom",
   "usingComponents": {}
 }

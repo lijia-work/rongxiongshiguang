@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "写日记",
+  "navigationStyle": "custom",
   "usingComponents": {}
 }

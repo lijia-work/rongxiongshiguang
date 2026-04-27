@@ -12,34 +12,16 @@
   border: 1px solid #F2E8DF;
 }
 
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-label {
-  font-weight: 600;
-  margin-bottom: 8px;
-  display: block;
-  color: #3E2C1F;
-}
-
-.picker-field {
-  padding: 12px 16px;
-  border-radius: 24px;
-  border: 1px solid #E8DDD2;
-  background: white;
-  font-size: 14px;
-}
-
 .textarea-field {
   width: 100%;
   min-height: 120px;
-  padding: 12px 16px;
+  padding: 14px 16px;
   border-radius: 24px;
   border: 1px solid #E8DDD2;
   background: white;
   font-size: 14px;
   box-sizing: border-box;
+  line-height: 1.6;
 }
 
 .char-count {
@@ -47,16 +29,6 @@
   font-size: 12px;
   color: #B3A28E;
   margin-top: 4px;
-}
-
-.input-field {
-  width: 100%;
-  padding: 12px 16px;
-  border-radius: 24px;
-  border: 1px solid #E8DDD2;
-  background: white;
-  font-size: 14px;
-  box-sizing: border-box;
 }
 
 /* 图片列表 */
@@ -111,6 +83,7 @@
   padding: 14px 24px;
   text-align: center;
   font-weight: 600;
+  font-size: 16px;
   margin-top: 8px;
 }
 
