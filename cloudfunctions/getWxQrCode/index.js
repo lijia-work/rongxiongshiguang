@@ -8,15 +8,15 @@ cloud.init({
 // 云函数入口函数
 exports.main = async (event, context) => {
   try {
-    // 使用 wxacode.get 方法生成小程序码（更稳定）
-    // path 必须是完整路径，且在 app.json 中注册
+    // 生成正式版小程序码
+    // envVersion: 'release' 表示正式线上版本
     const res = await cloud.openapi.wxacode.get({
-      path: 'pages/home/index', // 完整页面路径
+      path: 'pages/home/index',
       width: 280,
       autoColor: false,
       lineColor: { r: 217, g: 161, b: 59 },
       isHyaline: false,
-      envVersion: 'trial'
+      envVersion: 'release'
     });
 
     // 上传到云存储

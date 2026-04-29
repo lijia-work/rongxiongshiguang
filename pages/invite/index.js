@@ -29,31 +29,22 @@ Page({
       const cacheTime = wx.getStorageSync('appQrCodeTime');
       const now = Date.now();
 
-      // 缓存有效期7天
-      if (cachedQrCode && cacheTime && (now - cacheTime < 7 * 24 * 60 * 60 * 1000)) {
+      // 缓存有效期30天
+      if (cachedQrCode && cacheTime && (now - cacheTime < 30 * 24 * 60 * 60 * 1000)) {
         this.setData({ qrcodeUrl: cachedQrCode, qrcodeLoading: false });
         return;
       }
 
-      // 通过云函数获取小程序码
+      // 通过云函数获取正式版小程序码
       const res = await wx.cloud.callFunction({
-        name: 'getWxQrCode',
-        data: {
-          scene: 'invite',
-          page: 'pages/home/index',
-          width: 280
-        }
+        name: 'getWxQrCode'
       });
-
-      console.log('云函数返回:', res);
 
       if (res.result && res.result.success && res.result.fileID) {
         // 获取临时URL
         const fileRes = await wx.cloud.getTempFileURL({
           fileList: [res.result.fileID]
         });
-
-        console.log('临时URL返回:', fileRes);
 
         if (fileRes.fileList && fileRes.fileList[0] && fileRes.fileList[0].tempFileURL) {
           const qrcodeUrl = fileRes.fileList[0].tempFileURL;
@@ -63,17 +54,11 @@ Page({
           wx.setStorageSync('appQrCodeTime', now);
         }
       } else {
-        throw new Error('云函数返回结果异常');
+        throw new Error(res.result?.error?.errMsg || '生成小程序码失败');
       }
     } catch (err) {
       console.error('获取小程序码失败:', err);
       this.setData({ qrcodeLoading: false });
-      // 显示提示，让用户知道可以使用分享功能
-      wx.showToast({
-        title: '小程序码加载失败，可使用分享功能',
-        icon: 'none',
-        duration: 2000
-      });
     }
   },
 
